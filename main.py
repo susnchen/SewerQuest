@@ -1,4 +1,4 @@
-import pygame,player,bullet,enemy,room,constants as c
+import pygame,player,bullet,enemy,room,constants as c,time
 
 pygame.init()
 pygame.font.init()
@@ -6,6 +6,7 @@ pygame.font.init()
 screen = pygame.display.set_mode((640, 480))
 background =  pygame.image.load("assets\\images\\map.png")
 font = pygame.font.SysFont("None",20)
+bigFont = pygame.font.SysFont("none", 200)
 
 
 pygame.display.flip()
@@ -22,13 +23,36 @@ timeBetweenEnemy = 0
 timeBetweenDamage = 0
 bulletlist = []
 
+def pause():
+    pausedtxt = bigFont.render("PAUSED", 0, (0, 0, 0))
+    screen.blit(pausedtxt,(100,250))
+    pygame.display.flip()
+    time.sleep(.5)
+
+
+    paused = True
+    while paused:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                global running
+                running = False
+                paused = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_p]:
+            time.sleep(.5)
+            break
+
+        screen.blit(pausedtxt,(100,250))
+        pygame.display.flip()
+
 while running:
     if enemyList == []:
         enemyList = [enemy.Enemy(1,1,c.u*8,c.u*7)]
 
     clock.tick(60)
 
-    playerHP = font.render(str(playerObj.health),0,(255,255,255))
+    playerHP = font.render("health: " + str(playerObj.health),0,(255,255,255))
     playerpos = (playerObj.x,playerObj.y)
 
     for ev in pygame.event.get():
@@ -43,6 +67,9 @@ while running:
         curBullet.movement
         bulletlist += [bullet.Bullet(playerpos,playerObj.facing)]
 
+    if keys[pygame.K_p]:
+        pause()
+
     timeBetweenBullet += 1
     timeBetweenEnemy += 1
     timeBetweenDamage += 1
@@ -54,10 +81,7 @@ while running:
     screen.blit(background, (0,0))
 
     for i in enemyList:
-        print(timeBetweenDamage)
-        print(i.playerCollision(playerpos))
-        if i.playerCollision(playerpos) and timeBetweenDamage >= 25:
-            print("a")
+        if i.playerCollision(playerpos) and timeBetweenDamage >= 60:
             timeBetweenDamage = 0
             playerObj.health -= 1
 
