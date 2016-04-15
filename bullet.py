@@ -27,14 +27,11 @@ class Bullet:
 
         self.timeBetweenBullet += 1
 
-    def collide(self):
-
-        col = collision.Collision((self.x,self.y))
-        colList = col.checkCollision(c.obstacleList)
+    def collide(self, curRoom):
+        colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
         collided = False
 
         if self.playerfacing in colList:
             collided = True
-            print("a")
 
         return collided

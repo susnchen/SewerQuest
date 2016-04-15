@@ -1,20 +1,27 @@
 import pygame
+import constants as c
+from math import floor
 
-class Collision:
-    def __init__(self,position):
-        self.x = position[0]
-        self.y = position[1]
-        self.pos = position
-
-    def checkCollision(self,objs):
+def checkCollision(pos,obstacleList):
         col = []
-        for i in objs:
-            col += self.objcollision(self.pos,(i[1],i[2]),i[0][0],i[0][1])[0]
+        for i in obstacleList:
+            col += playerCollision(pos,(i[0][0],i[0][1]), i[1][0], i[1][0])[0]
+
         return col
 
-    def objcollision(self,pos,objpos,objW,objH):
+def checkTransition(pos):
+    roomNum = 4
+
+    for i in c.doorPos:
+        if objectCollider(pos, i):
+            roomNum = int(str(c.doorPos.index(i)/2)[0])
+
+    return roomNum
+
+def playerCollision(pos,objpos,objW,objH):
         collision = []
         collided = False
+
         #if player position is to the right or left of the object and y coordinate of player is within 32 pixels of the y coordinate of the object
         if pos[0] == objpos[0] + objW and not(pos[1] >= objpos[1] + objH-1 or pos[1] + 31 <= objpos[1]):
             collision += ["left"]
@@ -28,14 +35,15 @@ class Collision:
         if pos[1] + 32 == objpos[1] and not(pos[0] > objpos[0] + objW-1 or pos[0] + 31 < objpos[0]):
             collision += ["down"]
             collided = True
+
         return collision,collided
 
-    def enemyCollider(self,pos,objpos):
+def objectCollider(pos,objpos):
         collided = False
-        enemy = pygame.Rect((pos),(32,32))
-        object = pygame.Rect((objpos),(32,32))
+        object1 = pygame.Rect((pos),(32,32))
+        object2= pygame.Rect((objpos),(32,32))
 
-        if enemy.colliderect(object) == True:
+        if object1.colliderect(object2) == True:
             collided = True
 
         return collided

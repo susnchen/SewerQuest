@@ -19,12 +19,11 @@ class Player:
         else:
             print("alive")
 
-    def move(self):
+    def movement(self,curRoom):
 
         keys = pygame.key.get_pressed()
 
-        col = collision.Collision((self.x,self.y))
-        colList = col.checkCollision(c.obstacleList)
+        colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
 
         if keys[pygame.K_UP]:
             self.facing = "up"
@@ -87,3 +86,9 @@ class Player:
 
     def hurtSprite(self):
         self.img = self.img.set_alpha()
+
+    def move(self,pos,facing):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.img = pygame.image.load("assets\\images\\"+ facing + "1.png")
+        self.default = pygame.image.load("assets\\images\\"+ facing + "1.png")
