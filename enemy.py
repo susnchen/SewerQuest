@@ -1,6 +1,7 @@
 import constants as c
 import collision
 from math import fabs
+import pathfinding
 
 class Enemy:
     def __init__(self, strength,type, x, y):
@@ -11,6 +12,7 @@ class Enemy:
         self.img = c.enemyimg
 
     def movement(self,playerpos,curRoom):
+        pathfinding.pathfind(curRoom,(int(self.x/32),int(self.y/32)),(int(playerpos[0]/32),int(playerpos[1]/32)))
         playerx = playerpos[0]
         playery = playerpos[1]
 

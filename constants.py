@@ -1,6 +1,9 @@
 import pygame
 
 u = 32 #one unit in the game is 32 pixels
+gamew = 352
+gameh = 288
+#9,11
 
 bulletl = pygame.image.load("assets\\images\\bullet.png")
 bulletd = pygame.transform.rotate(bulletl,90)

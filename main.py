@@ -12,7 +12,7 @@ pygame.font.init()
 curRoomNum = 0
 curRoom = room.roomList[curRoomNum]
 
-screen = pygame.display.set_mode((640, 512))
+screen = pygame.display.set_mode((c.gamew, c.gameh))
 background = curRoom.roomImg
 font = pygame.font.SysFont("None",20)
 
