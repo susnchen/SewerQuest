@@ -5,7 +5,7 @@ from math import floor
 def checkCollision(pos,obstacleList):
         col = []
         for i in obstacleList:
-            col += playerCollision(pos,(i[0][0],i[0][1]), i[1][0], i[1][0])[0]
+            col += playerCollision(pos,i)[0]
 
         return col
 
@@ -18,7 +18,7 @@ def checkTransition(pos):
 
     return roomNum
 
-def playerCollision(pos,objpos,objW,objH):
+def playerCollision(pos,objpos,objW = 32,objH = 32):
         collision = []
         collided = False
 
@@ -38,12 +38,29 @@ def playerCollision(pos,objpos,objW,objH):
 
         return collision,collided
 
-def objectCollider(pos,objpos):
-        collided = False
+def objectCollider(pos,objpos,objw = 32, objh = 32):
         object1 = pygame.Rect((pos),(32,32))
-        object2= pygame.Rect((objpos),(32,32))
+        object2 = pygame.Rect((objpos),(objw,objh))
 
-        if object1.colliderect(object2) == True:
-            collided = True
+        collided = bool(object1.colliderect(object2))
 
         return collided
+
+def bulletCollider(bulletpos, objpos):
+    collided = False
+    objectRect = pygame.Rect(objpos,(32,32))
+    bulletRect = pygame.Rect(bulletpos,(5,5))
+
+    collided = objectRect.contains(bulletRect)
+    '''if facing == "down":
+        collided = objectRect.collidepoint(bulletx+2,bullety+6)
+        print((bulletx+2,bullety+6),(objpos))
+    elif facing == "up":
+        collided = objectRect.collidepoint(bulletx+2, bullety)
+    elif facing == "right":
+        collided = objectRect.collidepoint(bulletx+6, bullety+2)
+    elif facing == "left":
+        collided = objectRect.collidepoint(bulletx, bullety+2)'''
+
+    return bool(collided)
+

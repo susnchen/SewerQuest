@@ -1,5 +1,6 @@
 import constants as c
 import collision
+import pathfinder
 from math import fabs
 
 class Enemy:
@@ -9,8 +10,11 @@ class Enemy:
         self.y = y
         self.strength = strength
         self.img = c.enemyimg
+        self.timeBetweenEnemy = 0
 
     def movement(self,playerpos,curRoom):
+        #pathfinder.pathfind(curRoom,(self.x,self.y),playerpos)
+
         playerx = playerpos[0]
         playery = playerpos[1]
 
@@ -32,14 +36,12 @@ class Enemy:
             self.y += 4
 
     def deathCollision(self,bulletList):
-        obj = []
         death = False
         deathBullet = None
 
         for i in bulletList:
-            if collision.objectCollider((self.x,self.y),(i.x,i.y)) == True:
-                death = True
-                deathBullet = i
+            death = collision.objectCollider((self.x,self.y),(i.x,i.y),5,5)
+            deathBullet = i
 
         return death,deathBullet
 

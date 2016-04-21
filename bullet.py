@@ -1,37 +1,38 @@
 import collision, constants as c
 
 class Bullet:
-    def __init__(self,playerpos,playerfacing):
-        self.x = int(playerpos[0]/16)*16
-        self.y = int(playerpos[1]/16)*16
-        self.playerfacing = playerfacing
+    def __init__(self,playerpos,direction):
+        self.x = playerpos[0]+13
+        self.y = playerpos[1]+13
+        self.direction = direction
         self.timeBetweenBullet = 0
         self.bulletimg = c.bulletd
 
     def movement(self):
-        if self.playerfacing == "right":
+        if self.direction == "right":
             self.bulletimg = c.bulletr
             self.x += 16
 
-        elif self.playerfacing == "down":
+        elif self.direction == "down":
             self.bulletimg = c.bulletd
             self.y += 16
 
-        elif self.playerfacing == "up":
+        elif self.direction == "up":
             self.bulletimg = c.bulletu
             self.y -= 16
 
-        elif self.playerfacing == "left":
+        elif self.direction == "left":
             self.bulletimg = c.bulletl
             self.x -= 16
 
         self.timeBetweenBullet += 1
 
     def collide(self, curRoom):
-        colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
         collided = False
+        obstacleList = curRoom.obstacleList
 
-        if self.playerfacing in colList:
-            collided = True
+        for i in obstacleList:
+            if collision.objectCollider(i,(self.x,self.y),5,5):
+                collided = True
 
         return collided

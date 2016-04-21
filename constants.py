@@ -1,4 +1,7 @@
 import pygame
+gamew = 640
+gameh = 512
+#9,11
 
 u = 32 #one unit in the game is 32 pixels
 
@@ -49,7 +52,9 @@ doorPos = [(288,-32),(320,-32),(640,224),(640,256),(320,512),(288,512),(-32,224)
 
 roomImg = [
     pygame.image.load("assets\\images\\room0.png"),
-    pygame.image.load("assets\\images\\room1.png")
+    pygame.image.load("assets\\images\\room1.png"),
+    pygame.image.load("assets\\images\\room2.png"),
+    pygame.image.load("assets\\images\\room3.png")
 ]
 
 roomList = []

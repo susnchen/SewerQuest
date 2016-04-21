@@ -9,10 +9,10 @@ import collision
 pygame.init()
 pygame.font.init()
 
-curRoomNum = 0
+curRoomNum = 2
 curRoom = room.roomList[curRoomNum]
 
-screen = pygame.display.set_mode((640, 512))
+screen = pygame.display.set_mode((c.gamew, c.gameh))
 background = curRoom.roomImg
 font = pygame.font.SysFont("None",20)
 
@@ -23,10 +23,8 @@ clock = pygame.time.Clock()
 
 running = True
 playerObj = player.Player(1)
-enemyList = [enemy.Enemy(1,1,c.u*8,c.u*7)]
 
 timeBetweenBullet = 0
-timeBetweenEnemy = 0
 timeBetweenDamage = 0
 nextRoom = 0
 bulletlist = []
@@ -55,7 +53,6 @@ while running:
         bulletlist += [bullet.Bullet(playerpos,playerObj.facing)]
 
     timeBetweenBullet += 1
-    timeBetweenEnemy += 1
     timeBetweenDamage += 1
 
     playerObj.movement(curRoom)
@@ -79,11 +76,6 @@ while running:
 
     screen.blit(curRoom.roomImg, (-32,-32))
 
-    for i in enemyList:
-        if i.playerCollision(playerpos) and timeBetweenDamage >= 60:
-            timeBetweenDamage = 0
-            playerObj.health -= 1
-
     for i in bulletlist:
         if i.collide(curRoom) == True:
             del bulletlist[bulletlist.index(i)]
@@ -91,15 +83,22 @@ while running:
         screen.blit(i.bulletimg,(i.x,i.y))
         i.movement()
 
-    for i in enemyList:
-        if timeBetweenEnemy >= 2:
-            timeBetweenEnemy = 0
+    #print(playerpos)
+
+    for i in curRoom.enemyList:
+        i.timeBetweenEnemy += 1
+        if i.playerCollision(playerpos) and timeBetweenDamage >= 60:
+            timeBetweenDamage = 0
+            playerObj.health -= 1
+
+        if i.timeBetweenEnemy >= 2:
+            i.timeBetweenEnemy = 0
             i.movement(playerpos,curRoom)
 
         enemydeath = i.deathCollision(bulletlist)
         if enemydeath[0]:
             del bulletlist[bulletlist.index(enemydeath[1])]
-            del enemyList[enemyList.index(i)]
+            del curRoom.enemyList[curRoom.enemyList.index(i)]
 
         screen.blit(i.img,(i.x,i.y))
 
