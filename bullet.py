@@ -1,12 +1,30 @@
 import collision, constants as c
+from math import atan2, degrees, pi
 
 class Bullet:
-    def __init__(self,playerpos,direction):
+    def __init__(self,playerpos,mousepos):
         self.x = playerpos[0]+13
         self.y = playerpos[1]+13
-        self.direction = direction
+        self.direction = self.direction(mousepos)
         self.timeBetweenBullet = 0
         self.bulletimg = c.bulletd
+
+    def direction(self,mousepos):
+        dx = mousepos[0] - self.x
+        dy = mousepos[1] - self.y
+        degree = degrees(atan2(-dy,dx))
+        direction = 0
+
+        if degree >= -45 and degree < 45:
+            direction = "right"
+        elif degree >= 45 and degree < 135:
+            direction = "up"
+        elif degree >= -180 and degree < -45:
+            direction = "down"
+        elif degree >= 135 or degree > -180:
+            direction = "left"
+        return direction
+
 
     def movement(self):
         if self.direction == "right":

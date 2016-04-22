@@ -25,7 +25,7 @@ class Player:
 
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_w]:
             self.facing = "up"
 
             if keys[pygame.K_z]:
@@ -42,7 +42,7 @@ class Player:
             if "up" not in colList:
                 self.y -= 8
 
-        elif keys[pygame.K_DOWN]:
+        if keys[pygame.K_s]:
             self.facing = "down"
             self.spriteCount += 1
 
@@ -55,7 +55,7 @@ class Player:
             if "down" not in colList:
                 self.y += 8
 
-        elif keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             self.facing = "left"
             self.spriteCount += 1
 
@@ -68,7 +68,7 @@ class Player:
             if "left" not in colList:
                 self.x -= 8
 
-        elif keys[pygame.K_RIGHT]:
+        if keys[pygame.K_d]:
             self.facing = "right"
             self.spriteCount += 1
 
