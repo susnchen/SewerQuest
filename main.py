@@ -4,11 +4,13 @@ import bullet
 import room
 import constants as c
 import collision
-
+import level
 pygame.init()
 pygame.font.init()
 
-curRoomNum = 2
+levelNum = int(input("level: "))
+
+curRoomNum = 0
 curRoom = room.roomList[curRoomNum]
 time = 120
 timecount = 0
@@ -30,22 +32,26 @@ timeBetweenDamage = 0
 nextRoom = 0
 bulletlist = []
 
+level = level.Level(levelNum)
+
 def movement():
-    global playerObj, bulletlist, curRoomNum, curRoom, timeBetweenBullet, timeBetweenDamage
+    global playerObj, bulletlist, curRoomNum, curRoom, timeBetweenBullet, timeBetweenDamage, level
+    curRoom = level.curRoom
     leftClick = pygame.mouse.get_pressed()[0]
     playerObj.movement(curRoom)
 
     playerpos = (playerObj.x, playerObj.y)
 
-    if leftClick and timeBetweenBullet > 10:
+    if leftClick and timeBetweenBullet > 20:
         timeBetweenBullet = 0
         bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
 
     if collision.checkTransition(playerpos) != 4:
+        bulletlist = []
         nextRoom = room.transition(collision.checkTransition(playerpos), curRoomNum)
 
         curRoomNum = nextRoom[0]
-        curRoom = room.roomList[curRoomNum]
+        level.updateRoom(curRoomNum)
 
         if nextRoom[1] == 0:
             playerObj.move((320, 0), "down")
@@ -58,6 +64,10 @@ def movement():
 
         elif nextRoom[1] == 3:
             playerObj.move((0, 224), "right")
+
+    if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
+        level.updateFish()
+        curRoom.fishPlacement = False
 
     for i in bulletlist:
         if i.collide(curRoom) == True:
@@ -81,7 +91,7 @@ def movement():
             del curRoom.enemyList[curRoom.enemyList.index(i)]
 
 def display():
-    global screen, timetxt, playerObj, curRoom, bulletlist
+    global screen, timetxt, playerObj, curRoom, bulletlist, level
     screen.blit(playerObj.img,(playerObj.x,playerObj.y))
     screen.blit(curRoom.roomImg, (-32, -32))
 
@@ -92,16 +102,19 @@ def display():
 
     screen.blit(playerObj.img, (playerObj.x,playerObj.y))
 
+    if curRoom.fishPlacement != False:
+        screen.blit(c.fishImg[1], curRoom.fishPlacement)
+
     for i in range(0, playerObj.health):
         screen.blit(c.heartImg, (512 + i * 32, 0))
 
-    for i in range(0, c.lvl1):
-        screen.blit(c.fishImg, (576 - i * 32, 480))
+    for i in range(0, c.levelSettings[levelNum]):
+        screen.blit(c.fishImg[0], (576 - i * 32, 480))
+
+    for i in range(0, c.levelSettings[levelNum] - level.fishesLeft):
+        screen.blit(c.fishImg[1], (576 - i * 32, 480))
 
     screen.blit(timetxt, (32, 12))
-
-
-
 
 while running:
     clock.tick(60)

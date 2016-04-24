@@ -1,8 +1,5 @@
-import collision
 import constants as c
 import enemy
-import pathfinder
-from math import sqrt
 
 roomDoorList = [
     # "room" + room index : ((this room's door, the room index the door leads to))
@@ -21,6 +18,8 @@ roomEnemyDict = {
     3: [enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3)],
 }
 
+fishPlacements = [(32,32), False, (32,32),(32,32),(32,32)]
+
 class Room:
     def __init__(self,roomNum):
         self.obstacleList = []
@@ -33,6 +32,14 @@ class Room:
                     self.obstacleList += [(x, y)]
 
         self.enemyList = roomEnemyDict.get(roomNum)
+        self.fishPlacement = self.getFish()
+
+    def getFish(self):
+        fishPlacements = [(32,32), False, (32,32),(32,32),(32,32)]
+        fishPlacement = False
+        if fishPlacements[self.roomNum] != False:
+            fishPlacement = fishPlacements[self.roomNum]
+        return fishPlacement
 
     def getObstacleList(self):
         return self.obstacleList

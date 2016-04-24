@@ -47,20 +47,10 @@ def objectCollider(pos,objpos,objw = 32, objh = 32):
         return collided
 
 def bulletCollider(bulletpos, objpos):
-    collided = False
     objectRect = pygame.Rect(objpos,(32,32))
     bulletRect = pygame.Rect(bulletpos,(5,5))
 
     collided = objectRect.contains(bulletRect)
-    '''if facing == "down":
-        collided = objectRect.collidepoint(bulletx+2,bullety+6)
-        print((bulletx+2,bullety+6),(objpos))
-    elif facing == "up":
-        collided = objectRect.collidepoint(bulletx+2, bullety)
-    elif facing == "right":
-        collided = objectRect.collidepoint(bulletx+6, bullety+2)
-    elif facing == "left":
-        collided = objectRect.collidepoint(bulletx, bullety+2)'''
 
     return bool(collided)
 

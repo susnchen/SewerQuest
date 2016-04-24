@@ -58,8 +58,15 @@ roomImg = [
 ]
 
 heartImg = pygame.image.load("assets\\images\\heart.png")
-fishImg = pygame.image.load("assets\\images\\fish.png")
+fishImg = [
+    pygame.image.load("assets\\images\\fish0.png"),
+    pygame.image.load("assets\\images\\fish1.png")
+]
 
 lvl1 = 2
+
+levelSettings = [
+    4,(5)
+]
 
 roomList = []
