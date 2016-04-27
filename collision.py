@@ -1,6 +1,5 @@
 import pygame
 import constants as c
-from math import floor
 
 def checkCollision(pos,obstacleList):
         col = []

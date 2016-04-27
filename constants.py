@@ -1,7 +1,27 @@
 import pygame
+pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
+pygame.font.init()
+
 gamew = 640
 gameh = 512
-#9,11
+
+#Loading Screen
+screen = pygame.display.set_mode((gamew, gameh))
+background = pygame.Surface(screen.get_size())
+background = background.convert()
+background.fill((250, 250, 250))
+font = pygame.font.Font(None, 36)
+text = font.render("Loading...", 1, (10, 10, 10))
+textpos = text.get_rect()
+textpos.centerx = background.get_rect().centerx
+background.blit(text, textpos)
+screen.blit(background, (0, 0))
+pygame.display.set_caption("Sewer Quest")
+
+pygame.display.flip()
+
+clock = pygame.time.Clock()
+clock.tick(60)
 
 u = 32 #one unit in the game is 32 pixels
 
@@ -68,5 +88,12 @@ lvl1 = 2
 levelSettings = [
     4,(5)
 ]
+
+mainAudio = pygame.mixer.Sound("assets\\audio\\camel.wav")
+mainAudio.set_volume(0.1)
+onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
+shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
+shoot.set_volume(0.5)
+
 
 roomList = []
