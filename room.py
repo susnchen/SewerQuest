@@ -2,29 +2,36 @@ import constants as c
 import enemy
 
 roomDoorList = [
-    # "room" + room index : ((this room's door, the room index the door leads to))
-    # for example:
-    # room0 has door1 and 3 open and door1 links to room2 and door3 links to room3
+    # index of this list is the room number
+    # where the 0th index of each item correspond to door 0 (top door)
+    # where the 1st index of each item correspond to door 1 (right door)
+    # where the 2nd index of each item correspond to door 2 (bottom door)
+    # where the 4rd index of each item correspond to door 3 (left door)
+    # the number in each index of the item represents the room the door leads to
+    # for example, room 0's door 1 leads to room 1
+    # room -1 does not exist so it leads to no where
     (-1,1,-1,-1),
     (2,3,-1,0),
     (-1,-1,1,-1),
     (-1,-1,-1,1)
 ]
 
+#a list of all the enemies in each room
 roomEnemyDict = {
     0: [],
-    1: [enemy.Enemy(1,1,c.u*8,c.u*7)],#,enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*10,c.u*13)],
+    1: [enemy.Enemy(1,1,c.u*8,c.u*7),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*10,c.u*13)],
     2: [enemy.Enemy(1,1,c.u*8,c.u*7),enemy.Enemy(1,1,c.u*16,c.u*3)],
-    3: [enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*16,c.u*3)],
+    3: [enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*14,c.u*6)],
 }
 
-fishPlacements = [(32,32), False, (32,32),(32,32),(32,32)]
+#placements of fishes
 
 class Room:
-    def __init__(self,roomNum):
+    def __init__(self,roomNum,fishPlacements):
         self.obstacleList = []
         self.roomNum = roomNum
         self.roomImg = c.roomImg[roomNum]
+        self.fishPlacements = fishPlacements
 
         for y in range(-32, 544, 32):
             for x in range(-32, 672, 32):
@@ -35,10 +42,10 @@ class Room:
         self.fishPlacement = self.getFish()
 
     def getFish(self):
-        fishPlacements = [(32,32), False, (32,32),(32,32),(32,32)]
+
         fishPlacement = False
-        if fishPlacements[self.roomNum] != False:
-            fishPlacement = fishPlacements[self.roomNum]
+        if self.fishPlacements[self.roomNum] != False:
+            fishPlacement = self.fishPlacements[self.roomNum]
         return fishPlacement
 
     def getObstacleList(self):
@@ -57,7 +64,3 @@ def transition(inCDoorNum,inCRoomNum):
         print(outGDoorNum)
 
     return nextRoom, outGDoorNum
-
-roomList = []
-for i in range(0, len(roomDoorList)):
-    roomList += [Room(i)]

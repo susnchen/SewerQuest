@@ -11,9 +11,10 @@ pygame.font.init()
 pygame.mixer.init()
 
 levelNum = int(input("level: "))
+level = level.Level(levelNum)
 
 curRoomNum = 0
-curRoom = room.roomList[curRoomNum]
+curRoom = level.roomList[curRoomNum]
 time = 1200
 timecount = 0
 
@@ -34,17 +35,18 @@ timeBetweenDamage = 0
 nextRoom = 0
 bulletlist = []
 
-level = level.Level(levelNum)
 
 c.mainAudio.play()
 
 while running:
     clock.tick(60)
 
+    #if player tries to quit
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             running = False
 
+    #timer counting down each second
     timecount += 1
     if timecount == 60:
         timecount = 0
@@ -53,24 +55,25 @@ while running:
     timeBetweenBullet += 1
     timeBetweenDamage += 1
 
+    #timer text
     timetxt = font.render("time: " + str(time), 1, (255, 255, 255))
 
-
+    #update current room and player position
     playerpos = (playerObj.x, playerObj.y)
-    curRoom = room.roomList[curRoomNum]
-    curRoom = level.curRoom
+    curRoom = level.roomList[curRoomNum]
 
+    #if you shoot
     if pygame.mouse.get_pressed()[0] and timeBetweenBullet > 20:
         timeBetweenBullet = 0
         bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
         c.shoot.play()
 
+    #check if player is collided with the portal to other rooms
     if collision.checkTransition(playerpos) != 4:
         bulletlist = []
         nextRoom = room.transition(collision.checkTransition(playerpos), curRoomNum)
 
         curRoomNum = nextRoom[0]
-        level.updateRoom(curRoomNum)
 
         if nextRoom[1] == 0:
             playerObj.move((320, 0), "down")
@@ -84,18 +87,22 @@ while running:
         elif nextRoom[1] == 3:
             playerObj.move((0, 224), "right")
 
+    #check if player is collided with a fish
     if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
-        level.updateFish()
+        level.fishesLeft -= 1
         curRoom.fishPlacement = False
 
+    #move the player
     playerObj.movement(curRoom)
 
+    #move all bullets
     for i in bulletlist:
         if i.collide(curRoom) == True:
             del bulletlist[bulletlist.index(i)]
             continue
         i.movement()
 
+    #move all enemy
     for i in curRoom.enemyList:
         i.timeBetweenEnemy += 1
         if i.playerCollision(playerpos) and timeBetweenDamage >= 60:
@@ -112,6 +119,7 @@ while running:
             del curRoom.enemyList[curRoom.enemyList.index(i)]
             c.onHit.play()
 
+    #display all items
     # <editor-fold desc="display">
     screen.blit(playerObj.img,(playerObj.x,playerObj.y))
     screen.blit(curRoom.roomImg, (-32, -32))
