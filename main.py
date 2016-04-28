@@ -59,16 +59,31 @@ def pause():
     pause = True
 
     while pause:
+        titletxt = menuFont.render("PAUSED",1, (255, 255, 255))
+
+        screen.blit(c.menuBackground,(0,0))
+        screen.blit(c.cat,(244, 157))
+        screen.blit(c.continueButton,(240,356))
+        screen.blit(c.menuButton,(215,422))
+        screen.blit(c.exitButton,(331, 422))
+        screen.blit(titletxt,(212,64))
+
+        pygame.display.update()
+
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
-        if ev.type == pygame.MOUSEBUTTONDOWN and button((0,0),64,32):
-            pause = False
-
-    print(1)
-    pygame.display.update()
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            #continue button
+            if button((240, 356),159,45):
+                pause = False
+            #menu button
+            if button((215,422),94,45):
+                pause = False
+            #exit button
+            if button((212,64),94,45):
+                pause = False
 
 def transistionIn(screen, img, posx = 0, posy = 0):
     for i in range(0, 255, 5):
@@ -99,6 +114,7 @@ while startScreen:
 
 # </editor-fold>
 
+# <editor-fold desc = "start menu">
 while startMenu:
     clock.tick(60)
     titletxt = menuFont.render("SEWER QUEST",1, (255, 255, 255))
@@ -112,17 +128,23 @@ while startMenu:
 
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
-            startScreen = False
+            startMenu = False
             running = False
 
         if ev.type == pygame.MOUSEBUTTONDOWN:
-            if button((264,296),45,111):
+            if button((264,296),111,45):
+                startMenu = False
+            #highscores button
+            if button((221,357),198,45):
                 pass
-
-
+            #exit button
+            if button((273,418),94,45):
+                startMenu = False
+                running = False
 
     pygame.display.update()
 
+# </editor-fold>
 
 playerObj = player.Player(name)
 

@@ -83,8 +83,11 @@ transistionImg = pygame.image.load("assets\\images\\blackScreen.png")
 startButton = pygame.image.load("assets\\images\\startButton.png")
 highscoresButton = pygame.image.load("assets\\images\\highscoresButton.png")
 exitButton = pygame.image.load("assets\\images\\exitButton.png")
+continueButton = pygame.image.load("assets\\images\\continueButton.png")
+menuButton = pygame.image.load("assets\\images\\menuButton.png")
 menuBackground = pygame.image.load("assets\\images\\bg.png")
 cat = pygame.image.load("assets\\images\\cat.png")
+sadCat = pygame.image.load("assets\\images\\sadCat.png")
 
 
 heartImg = pygame.image.load("assets\\images\\heart.png")
