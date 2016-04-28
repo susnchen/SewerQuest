@@ -24,9 +24,11 @@ transistion = True
 screen = pygame.display.set_mode((c.gamew, c.gameh))
 background = curRoom.roomImg
 font = pygame.font.Font("assets\\font.ttf",12)
+menuFont = pygame.font.Font("assets\\font.ttf",32)
 
 clock = pygame.time.Clock()
 
+startMenu = True
 startScreen = True
 running = True
 
@@ -96,6 +98,31 @@ while startScreen:
     pygame.display.update()
 
 # </editor-fold>
+
+while startMenu:
+    clock.tick(60)
+    titletxt = menuFont.render("SEWER QUEST",1, (255, 255, 255))
+
+    screen.blit(c.menuBackground,(0,0))
+    screen.blit(c.cat,(244, 157))
+    screen.blit(c.startButton,(264,296))
+    screen.blit(c.highscoresButton,(221,357))
+    screen.blit(c.exitButton,(273, 418))
+    screen.blit(titletxt,(135,60))
+
+    for ev in pygame.event.get():
+        if ev.type == pygame.QUIT:
+            startScreen = False
+            running = False
+
+        if ev.type == pygame.MOUSEBUTTONDOWN:
+            if button((264,296),45,111):
+                pass
+
+
+
+    pygame.display.update()
+
 
 playerObj = player.Player(name)
 
