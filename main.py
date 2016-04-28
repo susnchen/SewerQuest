@@ -36,7 +36,7 @@ nextRoom = 0
 bulletlist = []
 # </editor-fold>
 
-c.mainAudio.play()
+#c.mainAudio.play()
 
 # <editor-fold desc="functions">
 
@@ -68,24 +68,10 @@ def pause():
     print(1)
     pygame.display.update()
 
-def transitionOut(screen, background, posx = 0, posy = 0):
-    transitionImg = c.transistionImg
-
-    for i in range (0,255,5):
-        screen.blit(background, (posx, posy))
-        transitionImg.set_alpha(i)
-        screen.blit(transitionImg,(0,0))
-
-        pygame.display.update()
-
-
-def transistionIn(screen, background, posx = 0, posy = 0):
-    transitionImg = c.transistionImg
-
-    for i in range(255, -1, -5):
-        screen.blit(background, (posx, posy))
-        transitionImg.set_alpha(i)
-        screen.blit(transitionImg, (0, 0))
+def transistionIn(screen, img, posx = 0, posy = 0):
+    for i in range(0, 255, 5):
+        img.set_alpha(i)
+        screen.blit(img, (posx, posy))
         pygame.display.update()
 
 # </editor-fold>
@@ -104,10 +90,9 @@ while startScreen:
             running = False
 
         if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
-            transitionOut(screen,c.startScreenImg)
-            transistionIn(screen, curRoom.roomImg, posx = -32,posy = -32)
-
+            transistionIn(screen, c.transistionImg)
             startScreen = False
+
     pygame.display.update()
 
 # </editor-fold>
@@ -236,5 +221,7 @@ while running:
     # </editor-fold>
 
 # </editor-fold>
+
+
 
 

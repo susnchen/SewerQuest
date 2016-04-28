@@ -79,7 +79,13 @@ roomImg = [
 
 startScreenImg = pygame.image.load("assets\\images\\startScreen.png")
 transistionImg = pygame.image.load("assets\\images\\blackScreen.png")
-whiteScreen = pygame.image.load("assets\\images\\whiteScreen.png")
+
+startButton = pygame.image.load("assets\\images\\startButton.png")
+highscoresButton = pygame.image.load("assets\\images\\highscoresButton.png")
+exitButton = pygame.image.load("assets\\images\\exitButton.png")
+menuBackground = pygame.image.load("assets\\images\\bg.png")
+cat = pygame.image.load("assets\\images\\cat.png")
+
 
 heartImg = pygame.image.load("assets\\images\\heart.png")
 fishImg = [
@@ -90,9 +96,9 @@ fishImg = [
 levelSettings = [
     4,(5)
 ]
-
+'''
 mainAudio = pygame.mixer.Sound("assets\\audio\\camel.wav")
-mainAudio.set_volume(0.1)
+mainAudio.set_volume(0.1)'''
 onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
 shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
 shoot.set_volume(0.1)
