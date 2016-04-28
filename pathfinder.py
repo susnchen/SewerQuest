@@ -38,11 +38,7 @@ def adjacentPos(i,objpos):
 def checkCloseList(closeList,Node):
     notInList = True
     for i in closeList:
-        print(len(closeList))
-        #print(Node.start,i.start)
         if Node.start == i.start: notInList = False
-
-    print(notInList)
 
     return notInList
 

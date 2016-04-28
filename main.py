@@ -6,37 +6,115 @@ import constants as c
 import collision
 import level
 
+# <editor-fold desc="initialize pygame library">
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
+# </editor-fold>
 
-levelNum = int(input("level: "))
+# <editor-fold desc="start game variables">
+levelNum = 0
 level = level.Level(levelNum)
-
 curRoomNum = 0
 curRoom = level.roomList[curRoomNum]
 time = 1200
 timecount = 0
+transistion = True
 
 screen = pygame.display.set_mode((c.gamew, c.gameh))
 background = curRoom.roomImg
-font = pygame.font.SysFont("None",20)
-
-
-pygame.display.flip()
+font = pygame.font.Font("assets\\font.ttf",12)
 
 clock = pygame.time.Clock()
 
+startScreen = True
 running = True
-playerObj = player.Player(1)
 
 timeBetweenBullet = 0
 timeBetweenDamage = 0
 nextRoom = 0
 bulletlist = []
-
+# </editor-fold>
 
 c.mainAudio.play()
+
+# <editor-fold desc="functions">
+
+def button(surfacePos, surfaceW, surfaceH):
+    mousePos = pygame.mouse.get_pos()
+    mask = pygame.Rect(surfacePos,(surfaceW,surfaceH))
+    pressed = False
+
+    if mask.collidepoint(mousePos[0],mousePos[1]):
+        pressed = True
+
+    print(pressed)
+
+    return pressed
+
+def pause():
+    clock.tick(1)
+    pause = True
+
+    while pause:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        if ev.type == pygame.MOUSEBUTTONDOWN and button((0,0),64,32):
+            pause = False
+
+    print(1)
+    pygame.display.update()
+
+def transitionOut(screen, background, posx = 0, posy = 0):
+    transitionImg = c.transistionImg
+
+    for i in range (0,255,5):
+        screen.blit(background, (posx, posy))
+        transitionImg.set_alpha(i)
+        screen.blit(transitionImg,(0,0))
+
+        pygame.display.update()
+
+
+def transistionIn(screen, background, posx = 0, posy = 0):
+    transitionImg = c.transistionImg
+
+    for i in range(255, -1, -5):
+        screen.blit(background, (posx, posy))
+        transitionImg.set_alpha(i)
+        screen.blit(transitionImg, (0, 0))
+        pygame.display.update()
+
+# </editor-fold>
+
+name = "susaniscool" #input()
+
+# <editor-fold desc="start screen">
+
+while startScreen:
+    screen.blit(c.startScreenImg,(0,0))
+
+    clock.tick(60)
+    for ev in pygame.event.get():
+        if ev.type == pygame.QUIT:
+            startScreen = False
+            running = False
+
+        if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
+            transitionOut(screen,c.startScreenImg)
+            transistionIn(screen, curRoom.roomImg, posx = -32,posy = -32)
+
+            startScreen = False
+    pygame.display.update()
+
+# </editor-fold>
+
+playerObj = player.Player(name)
+
+# <editor-fold desc="main game loop">
 
 while running:
     clock.tick(60)
@@ -45,6 +123,10 @@ while running:
     for ev in pygame.event.get():
         if ev.type == pygame.QUIT:
             running = False
+
+        if ev.type == pygame.MOUSEBUTTONDOWN and button((0,0),64,32):
+            pause()
+            clock.tick(1)
 
     #timer counting down each second
     timecount += 1
@@ -56,14 +138,18 @@ while running:
     timeBetweenDamage += 1
 
     #timer text
-    timetxt = font.render("time: " + str(time), 1, (255, 255, 255))
+    timetxt = font.render("TIME: " + str(time), 1, (255, 255, 255))
+
+    pausetxt = font.render("PAUSE", 1, (255, 255, 255))
+
+    click = pygame.mouse.get_pressed()[0]
 
     #update current room and player position
     playerpos = (playerObj.x, playerObj.y)
     curRoom = level.roomList[curRoomNum]
 
     #if you shoot
-    if pygame.mouse.get_pressed()[0] and timeBetweenBullet > 20:
+    if click and timeBetweenBullet > 20:
         timeBetweenBullet = 0
         bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
         c.shoot.play()
@@ -121,7 +207,6 @@ while running:
 
     #display all items
     # <editor-fold desc="display">
-    screen.blit(playerObj.img,(playerObj.x,playerObj.y))
     screen.blit(curRoom.roomImg, (-32, -32))
 
     for i in bulletlist:
@@ -143,9 +228,13 @@ while running:
     for i in range(0, c.levelSettings[levelNum] - level.fishesLeft):
         screen.blit(c.fishImg[1], (576 - i * 32, 480))
 
-    screen.blit(timetxt, (32, 12))
+    screen.blit(timetxt, (100, 3))
+    screen.blit(pausetxt, (6, 3))
+
+    pygame.display.update()
+
     # </editor-fold>
 
-    pygame.display.flip()
+# </editor-fold>
 
 

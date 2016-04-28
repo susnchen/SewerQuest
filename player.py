@@ -3,11 +3,13 @@ import collision
 import constants as c
 
 class Player:
-    def __init__(self, level):
+    def __init__(self,name):
         self.y = 64
         self.x = 32
+
         self.health = 3
-        self.level = level
+        self.name = name
+
         self.spriteCount = 0
         self.default = c.playerdown[0]
         self.img = c.playerdown[0]

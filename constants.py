@@ -77,13 +77,15 @@ roomImg = [
     pygame.image.load("assets\\images\\room3.png")
 ]
 
+startScreenImg = pygame.image.load("assets\\images\\startScreen.png")
+transistionImg = pygame.image.load("assets\\images\\blackScreen.png")
+whiteScreen = pygame.image.load("assets\\images\\whiteScreen.png")
+
 heartImg = pygame.image.load("assets\\images\\heart.png")
 fishImg = [
     pygame.image.load("assets\\images\\fish0.png"),
     pygame.image.load("assets\\images\\fish1.png")
 ]
-
-lvl1 = 2
 
 levelSettings = [
     4,(5)
@@ -93,7 +95,7 @@ mainAudio = pygame.mixer.Sound("assets\\audio\\camel.wav")
 mainAudio.set_volume(0.1)
 onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
 shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
-shoot.set_volume(0.5)
+shoot.set_volume(0.1)
 
 
 roomList = []
