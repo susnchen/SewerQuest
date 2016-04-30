@@ -99,9 +99,9 @@ fishImg = [
 levelSettings = [
     4,(5)
 ]
-'''
+
 mainAudio = pygame.mixer.Sound("assets\\audio\\camel.wav")
-mainAudio.set_volume(0.1)'''
+mainAudio.set_volume(0.1)
 onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
 shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
 shoot.set_volume(0.1)
