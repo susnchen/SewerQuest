@@ -35,6 +35,16 @@ def playerCollision(pos,objpos,objW = 32,objH = 32):
             collision += ["down"]
             collided = True
 
+        #if player is at the tip of a block (it handles diagonal walking so you don't walk diagonally through a wall)
+        if pos[0] == objpos[0] + objW and pos[1] == objpos[1] + objH:
+            collision += ["upleft"]
+        if pos[0] == objpos[0] + objW and pos[1] + 32 == objpos[1]:
+            collision += ["downleft"]
+        if pos[0] + 32 == objpos[0] and pos[1] + 32 == objpos[1]:
+            collision += ["downright"]
+        if pos[0] + 32 == objpos[0] and pos[1] == objpos[1] + objH:
+            collision += ["upright"]
+
         return collision,collided
 
 def objectCollider(pos,objpos,objw = 32, objh = 32):

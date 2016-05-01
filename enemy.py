@@ -23,17 +23,29 @@ class Enemy:
 
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
 
-        if self.x < playerx and "right" not in colList and dx >= dy:
-            self.x += 4
+        if self.y > playery and "up" not in colList:# and dy >= dx:
+            if "upleft" in colList:
+                colList += ["left"]
 
-        elif self.x > playerx and "left" not in colList and dx >= dy:
-            self.x -= 4
+            elif "upright" in colList:
+                colList += ["right"]
 
-        elif self.y > playery and "up" not in colList and dy >= dx:
             self.y -= 4
 
-        elif self.y < playery and "down" not in colList and dy >= dx:
+        if self.y < playery and "down" not in colList:# and dy >= dx:
+            if "downleft" in colList:
+                colList += ["left"]
+
+            elif "downright" in colList:
+                colList += ["right"]
+
             self.y += 4
+
+        if self.x < playerx and "right" not in colList:# and dx >= dy:
+            self.x += 4
+
+        if self.x > playerx and "left" not in colList:# and dx >= dy:
+            self.x -= 4
 
     def deathCollision(self,bulletList):
         death = False

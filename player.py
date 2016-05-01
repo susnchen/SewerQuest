@@ -42,6 +42,12 @@ class Player:
             self.default = c.playerup[0]
 
             if "up" not in colList:
+                if "upleft" in colList and keys[pygame.K_a]:
+                    colList += ["left"]
+
+                elif "upright" in colList and keys[pygame.K_d]:
+                    colList += ["right"]
+
                 self.y -= 8
 
         if keys[pygame.K_s]:
@@ -55,7 +61,17 @@ class Player:
             self.default = c.playerdown[0]
 
             if "down" not in colList:
+                if "downleft" in colList and keys[pygame.K_a]:
+                    colList += ["left"]
+                    print("left")
+
+                elif "downright" in colList and keys[pygame.K_d]:
+                    colList += ["right"]
+                    print("right")
+
                 self.y += 8
+
+        print(colList)
 
         if keys[pygame.K_a]:
             self.facing = "left"
