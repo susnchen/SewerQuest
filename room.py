@@ -16,18 +16,10 @@ roomDoorList = [
     (-1,-1,-1,1)
 ]
 
-#a list of all the enemies in each room
-roomEnemyDict = {
-    0: [],
-    1: [enemy.Enemy(1,1,c.u*8,c.u*7),enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*10,c.u*13)],
-    2: [enemy.Enemy(1,1,c.u*8,c.u*7),enemy.Enemy(1,1,c.u*16,c.u*3)],
-    3: [enemy.Enemy(1,1,c.u*16,c.u*3),enemy.Enemy(1,1,c.u*14,c.u*6)],
-}
-
 #placements of fishes
 
 class Room:
-    def __init__(self,roomNum,fishPlacements):
+    def __init__(self,roomNum,fishPlacements,enemyList):
         self.obstacleList = []
         self.roomNum = roomNum
         self.roomImg = c.roomImg[roomNum]
@@ -38,7 +30,8 @@ class Room:
                 if c.roomImg[roomNum].get_at((x + 32, y + 32)) == (129, 149, 173, 255):
                     self.obstacleList += [(x, y)]
 
-        self.enemyList = roomEnemyDict.get(roomNum)
+        #print(enemyList)
+        self.enemyList = enemyList
         self.fishPlacement = self.getFish()
 
     def getFish(self):
@@ -52,7 +45,9 @@ class Room:
         return self.obstacleList
 
 def transition(inCDoorNum,inCRoomNum):
-    nextRoom = roomDoorList[inCRoomNum][inCDoorNum]
+    nextRoomNum = roomDoorList[inCRoomNum][inCDoorNum]
+
+    print("the door " + str(inCDoorNum) + " from room " + str(inCRoomNum) + " is " + str(nextRoomNum))
 
     if inCDoorNum == 3 or inCDoorNum == 2:
         outGDoorNum = inCDoorNum - 2
@@ -60,7 +55,4 @@ def transition(inCDoorNum,inCRoomNum):
     else:
         outGDoorNum = inCDoorNum + 2
 
-    if inCDoorNum == 1:
-        print(outGDoorNum)
-
-    return nextRoom, outGDoorNum
+    return nextRoomNum, outGDoorNum

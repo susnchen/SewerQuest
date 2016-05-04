@@ -18,8 +18,12 @@ font = pygame.font.Font("assets\\font.ttf",12)
 menuFont = pygame.font.Font("assets\\font.ttf",32)
 
 clock = pygame.time.Clock()
-running = True
 
+running = True
+gameoverScreen = False
+gameScreen = False
+startScreen = False
+startMenu = False
 # </editor-fold>
 
 c.mainAudio.play()
@@ -36,6 +40,13 @@ def button(surfacePos, surfaceW, surfaceH):
 
     return pressed
 
+def posInt(int):
+    posInt = 0
+    if int > 0:
+        posInt = int
+
+    return posInt
+
 def transistionIn(img, posx = 0, posy = 0):
     for i in range(0, 255, 5):
         img.set_alpha(i)
@@ -43,7 +54,7 @@ def transistionIn(img, posx = 0, posy = 0):
         pygame.display.update()
 
 def pause():
-    gameStatus = [True,True]
+    global running,gameoverScreen,gameScreen,highscoreScreen
     clock.tick(15)
     pause = True
 
@@ -65,7 +76,7 @@ def pause():
                 quit()
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
-                print(pygame.mouse.get_pos())
+
                 #continue button
                 if button((240, 356),159,45):
                     transistionIn(c.transistionImg)
@@ -74,19 +85,74 @@ def pause():
                 #menu button
                 if button((215,422),94,45):
                     transistionIn(c.transistionImg)
-                    gameStatus = [True,False]
+                    gameoverScreen = False
+                    gameScreen = False
+                    highscoreScreen = False
                     pause = False
 
                 #exit button
                 if button((330,422),94,45):
                     transistionIn(c.transistionImg)
-                    gameStatus = [False,False]
+                    gameoverScreen = False
+                    gameScreen = False
+                    highscoreScreen = False
+                    running = False
                     pause = False
-    return gameStatus
+
+def gameOver(state,score):
+    global gameoverScreen, running
+    name = ""
+    while gameoverScreen:
+            clock.tick(15)
+            titletxt = menuFont.render(state,1, (255, 255, 255))
+            scoretxt = font.render("SCORE: " + str(score),1,(255,255,255))
+
+            if state == "GAME OVER":screen.blit(c.sadCat,(244, 157))
+            else:screen.blit(c.cat,(244, 157))
+
+            nametxt = font.render("ENTER NAME: " + name,1,(255,255,255))
+
+            screen.blit(c.menuBackground,(0,0))
+            screen.blit(c.cat,(244, 157))
+            screen.blit(c.continueButton,(240,400))
+            screen.blit(titletxt,(175,60))
+            screen.blit(scoretxt,(250,300))
+            screen.blit(nametxt, (250 - 7*len(name), 350))
+
+            for ev in pygame.event.get():
+                if ev.type == pygame.QUIT:
+                    gameoverScreen = False
+                    running = False
+
+                if ev.type == pygame.MOUSEBUTTONDOWN:
+                    if button((240,400),198,45):
+                        transistionIn(c.transistionImg)
+                        gameoverScreen = False
+
+                if ev.type == pygame.KEYDOWN:
+                    if ev.unicode.isalpha():
+                        name += ev.unicode.upper()
+
+                    elif ev.key == pygame.K_SPACE:
+                        name += " "
+
+                    elif ev.key == pygame.K_BACKSPACE:
+                        name = name[:-1]
+
+                    elif ev.key == pygame.K_RETURN:
+                        transistionIn(c.transistionImg)
+                        gameoverScreen = False
+
+
+            pygame.display.update()
+
+    highscoreFile = open("highscore.txt","a")
+    highscoreFile.write(name + ", " + str(score) + "\n")
+    highscoreFile.close()
+
+    return name
 
 # </editor-fold>
-
-name = "susaniscool" #input()
 
 while running:
 
@@ -100,11 +166,14 @@ while running:
     startMenu = True
     startScreen = True
     gameScreen = True
+    gameoverScreen = True
+    highscoreScreen = True
     timeBetweenBullet = 0
     timeBetweenDamage = 0
     nextRoom = 0
     bulletlist = []
     background = curRoom.roomImg
+    name = ""
     # </editor-fold>
 
     # <editor-fold desc="start screen">
@@ -119,6 +188,8 @@ while running:
                 startMenu = False
                 gameScreen = False
                 running = False
+                gameoverScreen = False
+                highscoreScreen = False
 
             if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
                 transistionIn(c.transistionImg)
@@ -146,6 +217,8 @@ while running:
                 startMenu = False
                 gameScreen = False
                 running = False
+                gameoverScreen = False
+                highscoreScreen = False
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 if button((264,296),111,45):
@@ -155,20 +228,24 @@ while running:
                 #highscores button
                 if button((221,357),198,45):
                     transistionIn(c.transistionImg)
-                    pass
+                    startMenu = False
+                    gameScreen = False
+                    gameoverScreen = False
 
                 #exit button
                 if button((273,418),94,45):
                     transistionIn(c.transistionImg)
                     startMenu = False
                     gameScreen = False
+                    gameoverScreen = False
                     running = False
+                    highscoreScreen = False
 
         pygame.display.update()
 
     # </editor-fold>
 
-    playerObj = player.Player(name)
+    playerObj = player.Player()
 
     # <editor-fold desc="game screen">
 
@@ -279,13 +356,12 @@ while running:
             if ev.type == pygame.QUIT:
                 gameScreen = False
                 running = False
+                gameoverScreen = False
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 #if you pressed the pause button
                 if button((0,0),64,32):
-                    gameStatus = pause()
-                    gameScreen = gameStatus[1]
-                    running = gameStatus[0]
+                    pause()
 
                 # if you shoot
                 elif timeBetweenBullet > 20:
@@ -298,86 +374,61 @@ while running:
 
     # </editor-fold>
 
-    if playerObj.health > 0:
-        victoryScreen = True
-        # <editor-fold desc="victory screen">
+    score = time + len(levelObj.fishPlacements) - levelObj.fishesLeft * 2
 
-        while victoryScreen:
-            clock.tick(15)
-            titletxt = menuFont.render("VICTORY",1, (255, 255, 255))
+    if playerObj.health > 0 and gameoverScreen:
+        name = gameOver("VICTORY", 2*score)
 
-            screen.blit(c.menuBackground,(0,0))
-            screen.blit(c.cat,(244, 157))
-            screen.blit(c.startButton,(264,296))
-            screen.blit(c.highscoresButton,(221,357))
-            screen.blit(c.exitButton,(273, 418))
-            screen.blit(titletxt,(200,60))
+    elif gameoverScreen:
+        name = gameOver("GAME OVER", score)
 
-            for ev in pygame.event.get():
-                if ev.type == pygame.QUIT:
-                    victoryScreen = False
+    # <editor-fold desc="highscore file indexing">
+    highscoreFile = open("highscore.txt","r")
+
+    lines = highscoreFile.readlines()
+    nameList = []
+    scoreList = []
+
+    for i in lines:
+        line = i.split(",")
+        if line[0][0] != "#":
+            nameList += [font.render(line[0],1,(255,255,255))]
+            scoreList += [font.render(line[1][:-1],1,(255,255,255))]
+
+    highscoreRange1 = posInt(len(nameList) - 9)
+    highscoreRange2 = len(nameList)
+
+    highscoreFile.close()
+    # </editor-fold>
+
+    while highscoreScreen:
+        clock.tick(15)
+        titletxt = menuFont.render("HIGH SCORE", 1, (255, 255, 255))
+
+        screen.blit(c.menuBackground, (0, 0))
+        screen.blit(titletxt, (150, 60))
+        screen.blit(c.menuButton,(215,422))
+        screen.blit(c.exitButton,(331, 422))
+
+        for i in range (highscoreRange1,highscoreRange2):
+            screen.blit(nameList[i],(150, 135 + (i - highscoreRange1)*30))
+            screen.blit(scoreList[i],(400, 135 + (i - highscoreRange1)*30))
+
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                running = False
+                highscoreScreen = False
+
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                #menu button
+                if button((215, 422), 94, 45):
+                    transistionIn(c.transistionImg)
+                    highscoreScreen = False
+
+                #exit button
+                if button((331, 422), 94, 45):
+                    transistionIn(c.transistionImg)
                     running = False
+                    highscoreScreen = False
 
-                if ev.type == pygame.MOUSEBUTTONDOWN:
-                    if button((264,296),111,45):
-                        transistionIn(c.transistionImg)
-                        victoryScreen = False
-
-                    #highscores button
-                    if button((221,357),198,45):
-                        transistionIn(c.transistionImg)
-                        pass
-
-                    #exit button
-                    if button((273,418),94,45):
-                        transistionIn(c.transistionImg)
-                        victoryScreen = False
-                        running = False
-
-            pygame.display.update()
-        # </editor-fold>
-
-    else:
-        gameoverScreen = True
-        # <editor-fold desc="game over screen">
-        while gameoverScreen:
-            clock.tick(15)
-            titletxt = menuFont.render("GAME OVER",1, (255, 255, 255))
-
-            screen.blit(c.menuBackground,(0,0))
-            screen.blit(c.cat,(244, 157))
-            screen.blit(c.startButton,(264,296))
-            screen.blit(c.highscoresButton,(221,357))
-            screen.blit(c.exitButton,(273, 418))
-            screen.blit(titletxt,(175,60))
-
-            for ev in pygame.event.get():
-                if ev.type == pygame.QUIT:
-                    gameoverScreen = False
-                    running = False
-
-                if ev.type == pygame.MOUSEBUTTONDOWN:
-                    if button((264,296),111,45):
-                        transistionIn(c.transistionImg)
-                        gameoverScreen = False
-
-                    #highscores button
-                    if button((221,357),198,45):
-                        transistionIn(c.transistionImg)
-                        pass
-
-                    #exit button
-                    if button((273,418),94,45):
-                        transistionIn(c.transistionImg)
-                        gameoverScreen = False
-                        running = False
-
-            pygame.display.update()
-        # </editor-fold>
-
-
-
-
-
-
-
+        pygame.display.update()

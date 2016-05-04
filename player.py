@@ -3,23 +3,16 @@ import collision
 import constants as c
 
 class Player:
-    def __init__(self,name):
+    def __init__(self):
         self.y = 64
         self.x = 32
 
         self.health = 3
-        self.name = name
 
         self.spriteCount = 0
         self.default = c.playerdown[0]
         self.img = c.playerdown[0]
         self.facing = "down"
-
-    def death(self):
-        if self.health == 0:
-            print("game over")
-        else:
-            print("alive")
 
     def movement(self,curRoom):
 
@@ -63,15 +56,11 @@ class Player:
             if "down" not in colList:
                 if "downleft" in colList and keys[pygame.K_a]:
                     colList += ["left"]
-                    print("left")
 
                 elif "downright" in colList and keys[pygame.K_d]:
                     colList += ["right"]
-                    print("right")
 
                 self.y += 8
-
-        print(colList)
 
         if keys[pygame.K_a]:
             self.facing = "left"
