@@ -53,13 +53,14 @@ def transistionIn(img, posx = 0, posy = 0):
         screen.blit(img, (posx, posy))
         pygame.display.update()
 
-def pause():
+def pause(score):
     global running,gameoverScreen,gameScreen,highscoreScreen
     clock.tick(15)
     pause = True
 
     while pause:
         titletxt = menuFont.render("PAUSED",1, (255, 255, 255))
+        scoretxt = font.render("SCORE: " + str(score),1,(255,255,255))
 
         screen.blit(c.menuBackground,(0,0))
         screen.blit(c.cat,(244, 157))
@@ -67,6 +68,7 @@ def pause():
         screen.blit(c.menuButton,(215,422))
         screen.blit(c.exitButton,(331, 422))
         screen.blit(titletxt,(212,64))
+        screen.blit(scoretxt,(260,300))
 
         pygame.display.update()
 
@@ -100,7 +102,7 @@ def pause():
                     pause = False
 
 def gameOver(state,score):
-    global gameoverScreen, running
+    global gameoverScreen, running, highscoreScreen
     name = ""
     while gameoverScreen:
             clock.tick(15)
@@ -123,6 +125,7 @@ def gameOver(state,score):
                 if ev.type == pygame.QUIT:
                     gameoverScreen = False
                     running = False
+                    highscoreScreen = False
 
                 if ev.type == pygame.MOUSEBUTTONDOWN:
                     if button((240,400),198,45):
@@ -161,7 +164,7 @@ while running:
     levelObj = level.Level(levelNum)
     curRoomNum = 0
     curRoom = levelObj.roomList[curRoomNum]
-    time = 1200
+    time = 120
     timecount = 0
     startMenu = True
     startScreen = True
@@ -173,6 +176,7 @@ while running:
     nextRoom = 0
     bulletlist = []
     background = curRoom.roomImg
+    score = time
     name = ""
     # </editor-fold>
 
@@ -256,6 +260,7 @@ while running:
         timecount += 1
         if timecount == 60:
             timecount = 0
+            score -= 1
             time -= 1
 
         timeBetweenBullet += 1
@@ -292,6 +297,7 @@ while running:
         #check if player is collided with a fish
         if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
             levelObj.fishesLeft -= 1
+            score += 5
             curRoom.fishPlacement = False
 
         #move the player
@@ -319,6 +325,7 @@ while running:
             if enemydeath[0]:
                 del bulletlist[bulletlist.index(enemydeath[1])]
                 del curRoom.enemyList[curRoom.enemyList.index(i)]
+                score += 4
                 c.onHit.play()
 
         #display all items
@@ -357,11 +364,12 @@ while running:
                 gameScreen = False
                 running = False
                 gameoverScreen = False
+                highscoreScreen = False
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 #if you pressed the pause button
                 if button((0,0),64,32):
-                    pause()
+                    pause(score)
 
                 # if you shoot
                 elif timeBetweenBullet > 20:
@@ -374,8 +382,6 @@ while running:
 
     # </editor-fold>
 
-    score = time + len(levelObj.fishPlacements) - levelObj.fishesLeft * 2
-
     if playerObj.health > 0 and gameoverScreen:
         name = gameOver("VICTORY", 2*score)
 
@@ -385,22 +391,24 @@ while running:
     # <editor-fold desc="highscore file indexing">
     highscoreFile = open("highscore.txt","r")
 
-    lines = highscoreFile.readlines()
-    nameList = []
-    scoreList = []
+    if highscoreScreen:
+        lines = highscoreFile.readlines()
+        nameList = []
+        scoreList = []
 
-    for i in lines:
-        line = i.split(",")
-        if line[0][0] != "#":
-            nameList += [font.render(line[0],1,(255,255,255))]
-            scoreList += [font.render(line[1][:-1],1,(255,255,255))]
+        for i in lines:
+            line = i.split(",")
+            if line[0][0] != "#":
+                nameList += [font.render(line[0],1,(255,255,255))]
+                scoreList += [font.render(line[1][:-1],1,(255,255,255))]
 
-    highscoreRange1 = posInt(len(nameList) - 9)
-    highscoreRange2 = len(nameList)
+        highscoreRange1 = posInt(len(nameList) - 9)
+        highscoreRange2 = len(nameList)
 
-    highscoreFile.close()
+        highscoreFile.close()
     # </editor-fold>
 
+    # <editor-fold desc="highscore screen">
     while highscoreScreen:
         clock.tick(15)
         titletxt = menuFont.render("HIGH SCORE", 1, (255, 255, 255))
@@ -432,3 +440,4 @@ while running:
                     highscoreScreen = False
 
         pygame.display.update()
+        # </editor-fold>
