@@ -68,7 +68,7 @@ playerright = [
     pygame.image.load("assets\\images\\right6.png")
 ]
 
-doorPos = [(288,-32),(320,-32),(640,224),(640,256),(320,512),(288,512),(-32,224),(-32,256)]
+doorPos = [(288,0),(320,0),(639,224),(639,256),(320,480),(288,480),(0,224),(0,256)]
 
 roomImg = [
     pygame.image.load("assets\\images\\room0.png"),
@@ -95,6 +95,14 @@ fishImg = [
     pygame.image.load("assets\\images\\fish0.png"),
     pygame.image.load("assets\\images\\fish1.png")
 ]
+
+muteButton = [
+    pygame.image.load("assets\\images\\muteButton0.png"),
+    pygame.image.load("assets\\images\\muteButton1.png")
+]
+
+muteButton[0].set_alpha(175)
+muteButton[1].set_alpha(175)
 
 levelSettings = [
     4,(5)

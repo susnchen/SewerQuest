@@ -12,7 +12,9 @@ def checkTransition(pos):
     roomNum = 4
 
     for i in c.doorPos:
-        if objectCollider(pos, i):
+        playerRect = pygame.Rect(pos,(32,32))
+        doorCol = playerRect.collidepoint(i)
+        if doorCol:
             roomNum = int(str(c.doorPos.index(i)/2)[0])
 
     return roomNum

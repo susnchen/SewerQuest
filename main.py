@@ -5,6 +5,7 @@ import room
 import constants as c
 import collision
 import level
+import audio
 
 # <editor-fold desc="initialize pygame library">
 pygame.init()
@@ -18,6 +19,7 @@ font = pygame.font.Font("assets\\font.ttf",12)
 menuFont = pygame.font.Font("assets\\font.ttf",32)
 
 clock = pygame.time.Clock()
+mainAudio = audio.Audio(c.mainAudio)
 
 running = True
 gameoverScreen = False
@@ -25,8 +27,6 @@ gameScreen = False
 startScreen = False
 startMenu = False
 # </editor-fold>
-
-c.mainAudio.play()
 
 # <editor-fold desc="functions">
 
@@ -49,16 +49,19 @@ def posInt(int):
 
 def transistionIn(img, posx = 0, posy = 0):
     for i in range(0, 255, 5):
+        mainAudio.update(255)
+        clock.tick(255)
         img.set_alpha(i)
         screen.blit(img, (posx, posy))
         pygame.display.update()
 
 def pause(score):
     global running,gameoverScreen,gameScreen,highscoreScreen
-    clock.tick(15)
     pause = True
 
     while pause:
+        mainAudio.update(15)
+        clock.tick(15)
         titletxt = menuFont.render("PAUSED",1, (255, 255, 255))
         scoretxt = font.render("SCORE: " + str(score),1,(255,255,255))
 
@@ -69,6 +72,7 @@ def pause(score):
         screen.blit(c.exitButton,(331, 422))
         screen.blit(titletxt,(212,64))
         screen.blit(scoretxt,(260,300))
+        screen.blit(c.muteButton[mainAudio.muteState], (5,5))
 
         pygame.display.update()
 
@@ -78,6 +82,8 @@ def pause(score):
                 quit()
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
+                #mute button
+                if button((5,5),32,32): mainAudio.mute()
 
                 #continue button
                 if button((240, 356),159,45):
@@ -101,53 +107,63 @@ def pause(score):
                     running = False
                     pause = False
 
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_ESCAPE:
+                    transistionIn(c.transistionImg)
+                    pause = False
+
 def gameOver(state,score):
     global gameoverScreen, running, highscoreScreen
     name = ""
     while gameoverScreen:
-            clock.tick(15)
-            titletxt = menuFont.render(state,1, (255, 255, 255))
-            scoretxt = font.render("SCORE: " + str(score),1,(255,255,255))
+        mainAudio.update(15)
+        clock.tick(15)
+        titletxt = menuFont.render(state,1, (255, 255, 255))
+        scoretxt = font.render("SCORE: " + str(score),1,(255,255,255))
 
-            if state == "GAME OVER":screen.blit(c.sadCat,(244, 157))
-            else:screen.blit(c.cat,(244, 157))
+        if state == "GAME OVER":screen.blit(c.sadCat,(244, 157))
+        else:screen.blit(c.cat,(244, 157))
 
-            nametxt = font.render("ENTER NAME: " + name,1,(255,255,255))
+        nametxt = font.render("ENTER NAME: " + name,1,(255,255,255))
 
-            screen.blit(c.menuBackground,(0,0))
-            screen.blit(c.cat,(244, 157))
-            screen.blit(c.continueButton,(240,400))
-            screen.blit(titletxt,(175,60))
-            screen.blit(scoretxt,(250,300))
-            screen.blit(nametxt, (250 - 7*len(name), 350))
+        screen.blit(c.menuBackground,(0,0))
+        screen.blit(c.cat,(244, 157))
+        screen.blit(c.continueButton,(240,400))
+        screen.blit(c.muteButton[mainAudio.muteState], (5,5))
+        screen.blit(titletxt,(175,60))
+        screen.blit(scoretxt,(250,300))
+        screen.blit(nametxt, (250 - 7*len(name), 350))
 
-            for ev in pygame.event.get():
-                if ev.type == pygame.QUIT:
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                gameoverScreen = False
+                running = False
+                highscoreScreen = False
+
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                #mute button
+                if button((5,5),32,32): mainAudio.mute()
+
+                if button((240,400),198,45):
+                    transistionIn(c.transistionImg)
                     gameoverScreen = False
-                    running = False
-                    highscoreScreen = False
 
-                if ev.type == pygame.MOUSEBUTTONDOWN:
-                    if button((240,400),198,45):
-                        transistionIn(c.transistionImg)
-                        gameoverScreen = False
+            if ev.type == pygame.KEYDOWN:
+                if ev.unicode.isalpha():
+                    name += ev.unicode.upper()
 
-                if ev.type == pygame.KEYDOWN:
-                    if ev.unicode.isalpha():
-                        name += ev.unicode.upper()
+                elif ev.key == pygame.K_SPACE:
+                    name += " "
 
-                    elif ev.key == pygame.K_SPACE:
-                        name += " "
-
-                    elif ev.key == pygame.K_BACKSPACE:
+                elif ev.key == pygame.K_BACKSPACE:
                         name = name[:-1]
 
-                    elif ev.key == pygame.K_RETURN:
-                        transistionIn(c.transistionImg)
-                        gameoverScreen = False
+                elif ev.key == pygame.K_RETURN:
+                    transistionIn(c.transistionImg)
+                    gameoverScreen = False
 
 
-            pygame.display.update()
+        pygame.display.update()
 
     highscoreFile = open("highscore.txt","a")
     highscoreFile.write(name + ", " + str(score) + "\n")
@@ -184,6 +200,7 @@ while running:
 
     while startScreen:
         screen.blit(c.startScreenImg,(0,0))
+        mainAudio.update(15)
 
         clock.tick(15)
         for ev in pygame.event.get():
@@ -206,6 +223,7 @@ while running:
     # <editor-fold desc = "start menu">
 
     while startMenu:
+        mainAudio.update(15)
         clock.tick(15)
         titletxt = menuFont.render("SEWER QUEST",1, (255, 255, 255))
 
@@ -213,6 +231,8 @@ while running:
         screen.blit(c.cat,(244, 157))
         screen.blit(c.startButton,(264,296))
         screen.blit(c.highscoresButton,(221,357))
+        if button((5,5),32,32): screen.blit(c.muteButton[int(not(bool(mainAudio.muteState)))], (5,5))
+        else: screen.blit(c.muteButton[mainAudio.muteState], (5,5))
         screen.blit(c.exitButton,(273, 418))
         screen.blit(titletxt,(135,60))
 
@@ -225,6 +245,9 @@ while running:
                 highscoreScreen = False
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
+                #mute button
+                if button((5,5),32,32): mainAudio.mute()
+
                 if button((264,296),111,45):
                     transistionIn(c.transistionImg)
                     startMenu = False
@@ -254,6 +277,7 @@ while running:
     # <editor-fold desc="game screen">
 
     while gameScreen:
+        mainAudio.update(60)
         clock.tick(60)
 
         #timer counting down each second
@@ -283,16 +307,16 @@ while running:
             curRoomNum = nextRoom[0]
 
             if nextRoom[1] == 0:
-                playerObj.move((320, 0), "down")
+                playerObj.move((320, 40), "down")
 
             elif nextRoom[1] == 1:
-                playerObj.move((608, 224), "left")
+                playerObj.move((600, 224), "left")
 
             elif nextRoom[1] == 2:
-                playerObj.move((288, 480), "up")
+                playerObj.move((288, 440), "up")
 
             elif nextRoom[1] == 3:
-                playerObj.move((0, 224), "right")
+                playerObj.move((8, 224), "right")
 
         #check if player is collided with a fish
         if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
@@ -377,12 +401,16 @@ while running:
                     bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
                     c.shoot.play()
 
-        if playerObj.health == 0 or levelObj.fishesLeft == 0:
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_ESCAPE:
+                    pause(score)
+
+        if playerObj.health == 0 or levelObj.fishesLeft == 0 or time <= 0:
             gameScreen = False
 
     # </editor-fold>
 
-    if playerObj.health > 0 and gameoverScreen:
+    if playerObj.health > 0 and time > 0 and gameoverScreen:
         name = gameOver("VICTORY", 2*score)
 
     elif gameoverScreen:
@@ -393,23 +421,22 @@ while running:
 
     if highscoreScreen:
         lines = highscoreFile.readlines()
-        nameList = []
-        scoreList = []
+        highscoreRange = posInt(len(lines) - 9)
+        highscoreDict = {}
 
-        for i in lines:
-            line = i.split(",")
+        for i in range(highscoreRange,len(lines)):
+            line = lines[i].split(",")
             if line[0][0] != "#":
-                nameList += [font.render(line[0],1,(255,255,255))]
-                scoreList += [font.render(line[1][:-1],1,(255,255,255))]
+                highscoreDict[font.render(line[0],1,(255,255,255))] = font.render(line[1][:-1],1,(255,255,255))
 
-        highscoreRange1 = posInt(len(nameList) - 9)
-        highscoreRange2 = len(nameList)
+        highscoreRange = posInt(len(highscoreDict) - 9)
 
         highscoreFile.close()
     # </editor-fold>
 
     # <editor-fold desc="highscore screen">
     while highscoreScreen:
+        mainAudio.update(15)
         clock.tick(15)
         titletxt = menuFont.render("HIGH SCORE", 1, (255, 255, 255))
 
@@ -417,10 +444,13 @@ while running:
         screen.blit(titletxt, (150, 60))
         screen.blit(c.menuButton,(215,422))
         screen.blit(c.exitButton,(331, 422))
+        screen.blit(c.muteButton[mainAudio.muteState], (5,5))
 
-        for i in range (highscoreRange1,highscoreRange2):
-            screen.blit(nameList[i],(150, 135 + (i - highscoreRange1)*30))
-            screen.blit(scoreList[i],(400, 135 + (i - highscoreRange1)*30))
+        lineNum = 0
+        for key,value in highscoreDict.items():
+            screen.blit(key,(175, 135 + (lineNum - highscoreRange)*30))
+            screen.blit(value,(410, 135 + (lineNum - highscoreRange)*30))
+            lineNum += 1
 
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
@@ -428,6 +458,9 @@ while running:
                 highscoreScreen = False
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
+                #mute button
+                if button((5,5),32,32): mainAudio.mute()
+
                 #menu button
                 if button((215, 422), 94, 45):
                     transistionIn(c.transistionImg)

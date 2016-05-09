@@ -19,7 +19,7 @@ class Bullet:
             direction = "right"
         elif degree >= 45 and degree < 135:
             direction = "up"
-        elif degree >= -180 and degree < -45:
+        elif degree >= -135 and degree < -45:
             direction = "down"
         elif degree >= 135 or degree > -180:
             direction = "left"
