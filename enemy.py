@@ -22,6 +22,7 @@ class Enemy:
         dy = fabs(playery - self.y)
 
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
+        colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
 
         if self.y > playery and "up" not in colList:# and dy >= dx:
             if "upleft" in colList:

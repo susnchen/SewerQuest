@@ -7,7 +7,7 @@ class Player:
         self.y = 64
         self.x = 32
 
-        self.health = 3
+        self.health = 100
 
         self.spriteCount = 0
         self.default = c.playerdown[0]
@@ -19,6 +19,7 @@ class Player:
         keys = pygame.key.get_pressed()
 
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
+        colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
 
         if keys[pygame.K_w]:
             self.facing = "up"

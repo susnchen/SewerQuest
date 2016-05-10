@@ -14,7 +14,6 @@ class Audio:
             self.sound.stop()
             self.sound.play()
             self.replayCounter = 0
-            print("audio played")
 
     def mute(self):
         if self.muteState == 1:

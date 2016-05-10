@@ -63,7 +63,6 @@ def pathfind(curRoom,start,goal):
             nextNode = Node(curNode.cost + 1,nextNodepos,goal,curNode)
 
             if (nextNodepos) not in curRoom.obstacleList and checkCloseList(closeList,nextNode):
-                #print(nextNodepos)
 
                 screen.blit(letter,(nextNodepos[0]*32,nextNodepos[1]*32))
                 pygame.display.update()
