@@ -7,33 +7,30 @@ class Player:
         self.y = 64
         self.x = 32
 
-        self.health = 100
+        self.health = 3
 
         self.spriteCount = 0
-        self.default = c.playerdown[0]
-        self.img = c.playerdown[0]
+        self.curSpriteSheet = c.playerSprites["idlel"]
+        self.img = self.curSpriteSheet[0]
+
         self.facing = "down"
 
     def movement(self,curRoom):
+        print(self.curSpriteSheet)
+        if self.spriteCount == len(self.curSpriteSheet):
+            self.spriteCount = 0
 
         keys = pygame.key.get_pressed()
 
+        idle = True
+
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
-        colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
+        colList += collision.checkCollision((self.x, self.y), curRoom.waterList)
 
         if keys[pygame.K_w]:
+            idle = False
+            self.curSpriteSheet = c.playerSprites["up"]
             self.facing = "up"
-
-            if keys[pygame.K_z]:
-                pass
-
-            self.spriteCount += 1
-
-            if self.spriteCount == 6:
-                self.spriteCount = 0
-
-            self.img = c.playerup[self.spriteCount]
-            self.default = c.playerup[0]
 
             if "up" not in colList:
                 if "upleft" in colList and keys[pygame.K_a]:
@@ -45,14 +42,9 @@ class Player:
                 self.y -= 8
 
         if keys[pygame.K_s]:
+            idle = False
+            self.curSpriteSheet = c.playerSprites["down"]
             self.facing = "down"
-            self.spriteCount += 1
-
-            if self.spriteCount == 6:
-                self.spriteCount = 0
-
-            self.img = c.playerdown[self.spriteCount]
-            self.default = c.playerdown[0]
 
             if "down" not in colList:
                 if "downleft" in colList and keys[pygame.K_a]:
@@ -64,39 +56,33 @@ class Player:
                 self.y += 8
 
         if keys[pygame.K_a]:
+            idle = False
+            print("left")
+            self.curSpriteSheet = c.playerSprites["left"]
             self.facing = "left"
-            self.spriteCount += 1
-
-            if self.spriteCount == 6:
-                self.spriteCount = 0
-
-            self.img = c.playerleft[self.spriteCount]
-            self.default = c.playerleft[0]
 
             if "left" not in colList:
                 self.x -= 8
 
         if keys[pygame.K_d]:
+            idle = False
+            self.curSpriteSheet = c.playerSprites["right"]
             self.facing = "right"
-            self.spriteCount += 1
-
-            if self.spriteCount == 6:
-                self.spriteCount = 0
-
-            self.img = c.playerright[self.spriteCount]
-            self.default = c.playerright[0]
 
             if "right" not in colList:
                 self.x += 8
 
-        else:
-            self.img = self.default
+        elif idle:
+            if self.facing == "right" or self.facing == "up":
+                print("else")
+                self.curSpriteSheet = c.playerSprites["idler"]
+            elif self.facing == "left" or self.facing == "down":
+                print("else")
+                self.curSpriteSheet = c.playerSprites["idlel"]
 
-    def hurtSprite(self):
-        self.img = self.img.set_alpha()
+        self.img = self.curSpriteSheet[self.spriteCount]
+        self.spriteCount += 1
 
-    def move(self,pos,facing):
+    def move(self,pos):
         self.x = pos[0]
         self.y = pos[1]
-        self.img = pygame.image.load("assets\\images\\"+ facing + "1.png")
-        self.default = pygame.image.load("assets\\images\\"+ facing + "1.png")

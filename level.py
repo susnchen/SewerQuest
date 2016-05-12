@@ -23,7 +23,7 @@ class Level:
             for j in range(0, random.randint(1, 3)):
                 randx = random.randint(1, 18)
                 randy = random.randint(1, 14)
-                enemyList += [enemy.Enemy(1, 1, 32 * randx, 32 * randy)]
+                enemyList += [enemy.Enemy(1, c.enemySpeedSetting[levelNum], 32 * randx, 32 * randy)]
 
             self.roomEnemyDict[i] = enemyList
 

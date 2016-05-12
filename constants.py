@@ -32,70 +32,75 @@ bulletu = pygame.transform.rotate(bulletr,90)
 
 enemyimg = pygame.image.load("assets\\images\\enemy.png")
 
-playerdown = [
-    pygame.image.load("assets\\images\\down1.png"),
-    pygame.image.load("assets\\images\\down2.png"),
-    pygame.image.load("assets\\images\\down3.png"),
-    pygame.image.load("assets\\images\\down4.png"),
-    pygame.image.load("assets\\images\\down5.png"),
-    pygame.image.load("assets\\images\\down6.png")
-]
-
-playerup = [
-    pygame.image.load("assets\\images\\up1.png"),
-    pygame.image.load("assets\\images\\up2.png"),
-    pygame.image.load("assets\\images\\up3.png"),
-    pygame.image.load("assets\\images\\up4.png"),
-    pygame.image.load("assets\\images\\up5.png"),
-    pygame.image.load("assets\\images\\up6.png")
-]
-
-playerleft = [
-    pygame.image.load("assets\\images\\left1.png"),
-    pygame.image.load("assets\\images\\left2.png"),
-    pygame.image.load("assets\\images\\left3.png"),
-    pygame.image.load("assets\\images\\left4.png"),
-    pygame.image.load("assets\\images\\left5.png"),
-    pygame.image.load("assets\\images\\left6.png")
-]
-
-playerright = [
-    pygame.image.load("assets\\images\\right1.png"),
-    pygame.image.load("assets\\images\\right2.png"),
-    pygame.image.load("assets\\images\\right3.png"),
-    pygame.image.load("assets\\images\\right4.png"),
-    pygame.image.load("assets\\images\\right5.png"),
-    pygame.image.load("assets\\images\\right6.png")
-]
+playerSprites = {
+    "down":[
+        pygame.image.load("assets\\images\\playersprites\\left0.png"),
+        pygame.image.load("assets\\images\\playersprites\\left1.png"),
+        pygame.image.load("assets\\images\\playersprites\\left2.png"),
+        pygame.image.load("assets\\images\\playersprites\\left3.png")
+    ],
+    "up":[
+        pygame.image.load("assets\\images\\playersprites\\right0.png"),
+        pygame.image.load("assets\\images\\playersprites\\right1.png"),
+        pygame.image.load("assets\\images\\playersprites\\right2.png"),
+        pygame.image.load("assets\\images\\playersprites\\right3.png")
+    ],
+    "left": [
+        pygame.image.load("assets\\images\\playersprites\\left0.png"),
+        pygame.image.load("assets\\images\\playersprites\\left1.png"),
+        pygame.image.load("assets\\images\\playersprites\\left2.png"),
+        pygame.image.load("assets\\images\\playersprites\\left3.png")
+    ],
+    "right": [
+        pygame.image.load("assets\\images\\playersprites\\right0.png"),
+        pygame.image.load("assets\\images\\playersprites\\right1.png"),
+        pygame.image.load("assets\\images\\playersprites\\right2.png"),
+        pygame.image.load("assets\\images\\playersprites\\right3.png")
+    ],
+    "idlel": [
+        pygame.image.load("assets\\images\\playersprites\\idlel0.png"),
+        pygame.image.load("assets\\images\\playersprites\\idlel1.png"),
+        pygame.image.load("assets\\images\\playersprites\\idlel0.png"),
+        pygame.image.load("assets\\images\\playersprites\\idlel1.png")
+    ],
+    "idler": [
+        pygame.image.load("assets\\images\\playersprites\\idler0.png"),
+        pygame.image.load("assets\\images\\playersprites\\idler1.png"),
+        pygame.image.load("assets\\images\\playersprites\\idler0.png"),
+        pygame.image.load("assets\\images\\playersprites\\idler1.png")
+    ]
+}
 
 doorPos = [(288,0),(320,0),(639,224),(639,256),(320,480),(288,480),(0,224),(0,256)]
 
-startScreenImg = pygame.image.load("assets\\images\\startScreen.png")
-transistionImg = pygame.image.load("assets\\images\\blackScreen.png")
+startScreenImg = pygame.image.load("assets\\images\\gui\\startScreen.png")
+transistionImg = pygame.image.load("assets\\images\\gui\\blackScreen.png")
 
-startButton = pygame.image.load("assets\\images\\startButton.png")
-highscoresButton = pygame.image.load("assets\\images\\highscoresButton.png")
-exitButton = pygame.image.load("assets\\images\\exitButton.png")
-continueButton = pygame.image.load("assets\\images\\continueButton.png")
-menuButton = pygame.image.load("assets\\images\\menuButton.png")
-menuBackground = pygame.image.load("assets\\images\\bg.png")
-cat = pygame.image.load("assets\\images\\cat.png")
-sadCat = pygame.image.load("assets\\images\\sadCat.png")
+startButton = pygame.image.load("assets\\images\\gui\\startButton.png")
+highscoresButton = pygame.image.load("assets\\images\\gui\\highscoresButton.png")
+exitButton = pygame.image.load("assets\\images\\gui\\exitButton.png")
+continueButton = pygame.image.load("assets\\images\\gui\\continueButton.png")
+menuButton = pygame.image.load("assets\\images\\gui\\menuButton.png")
+menuBackground = pygame.image.load("assets\\images\\gui\\bg.png")
+cat = pygame.image.load("assets\\images\\gui\\cat.png")
+sadCat = pygame.image.load("assets\\images\\gui\\sadCat.png")
 
 
-heartImg = pygame.image.load("assets\\images\\heart.png")
+heartImg = pygame.image.load("assets\\images\\gui\\heart.png")
 fishImg = [
-    pygame.image.load("assets\\images\\fish0.png"),
-    pygame.image.load("assets\\images\\fish1.png")
+    pygame.image.load("assets\\images\\gui\\fish0.png"),
+    pygame.image.load("assets\\images\\gui\\fish1.png")
 ]
 
 muteButton = [
-    pygame.image.load("assets\\images\\muteButton0.png"),
-    pygame.image.load("assets\\images\\muteButton1.png")
+    pygame.image.load("assets\\images\\gui\\muteButton0.png"),
+    pygame.image.load("assets\\images\\gui\\muteButton1.png")
 ]
 
 muteButton[0].set_alpha(175)
 muteButton[1].set_alpha(175)
+
+enemySpeedSetting = [2,4]
 
 #level setting is the speed of the mouse
 fishPlacements = {
@@ -171,7 +176,7 @@ roomDoorDict ={
             (-1,-1,-1,7),
             (-1,-1,7,10),
             (11,9,-1,-1),
-            (-1,12,10,11),
+            (-1,12,10,-1),
             (-1,13,-1,11),
             (14,-1,-1,12),
             (-1,15,13,-1),

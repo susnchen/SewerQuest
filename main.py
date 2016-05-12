@@ -234,9 +234,9 @@ while running:
     highscoreScreen = True
     levelNum = 1
     levelObj = level.Level(levelNum)
-    curRoomNum = 10
+    curRoomNum = 0
     curRoom = levelObj.roomList[curRoomNum]
-    time = 120
+    time = 180
     timecount = 0
     timeBetweenBullet = 0
     timeBetweenDamage = 0
@@ -329,9 +329,8 @@ while running:
     # <editor-fold desc="game screen">
 
     while gameScreen:
-        print(curRoomNum)
-        if not mainAudio.muteState:mainAudio.update(60)
-        clock.tick(60)
+        if not mainAudio.muteState:mainAudio.update(25)
+        clock.tick(25)
 
         #timer counting down each second
         timecount += 1
@@ -360,16 +359,16 @@ while running:
             curRoomNum = nextRoom[0]
 
             if nextRoom[1] == 0:
-                playerObj.move((320, 40), "down")
+                playerObj.move((320, 40))
 
             elif nextRoom[1] == 1:
-                playerObj.move((600, 224), "left")
+                playerObj.move((600, 224))
 
             elif nextRoom[1] == 2:
-                playerObj.move((288, 440), "up")
+                playerObj.move((288, 440))
 
             elif nextRoom[1] == 3:
-                playerObj.move((8, 224), "right")
+                playerObj.move((8, 224))
 
         #check if player is collided with a fish
         if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
@@ -449,7 +448,7 @@ while running:
                     pause(score)
 
                 # if you shoot
-                elif timeBetweenBullet > 20:
+                elif timeBetweenBullet > 5:
                     timeBetweenBullet = 0
                     bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
                     c.shoot.play()

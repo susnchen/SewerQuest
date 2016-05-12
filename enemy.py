@@ -1,11 +1,9 @@
 import constants as c
 import collision
-import pathfinder
-from math import fabs
 
 class Enemy:
-    def __init__(self, strength,type, x, y):
-        self.type = type
+    def __init__(self, strength, spd, x, y):
+        self.spd = spd
         self.x = x
         self.y = y
         self.strength = strength
@@ -18,11 +16,9 @@ class Enemy:
         playerx = playerpos[0]
         playery = playerpos[1]
 
-        dx = fabs(playerx - self.x)
-        dy = fabs(playery - self.y)
-
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
-        colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
+        #rats aren't scared of water, therefore they can walk over water
+        #colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
 
         if self.y > playery and "up" not in colList:# and dy >= dx:
             if "upleft" in colList:
@@ -31,7 +27,7 @@ class Enemy:
             elif "upright" in colList:
                 colList += ["right"]
 
-            self.y -= 4
+            self.y -= self.spd
 
         if self.y < playery and "down" not in colList:# and dy >= dx:
             if "downleft" in colList:
@@ -40,13 +36,13 @@ class Enemy:
             elif "downright" in colList:
                 colList += ["right"]
 
-            self.y += 4
+            self.y += self.spd
 
         if self.x < playerx and "right" not in colList:# and dx >= dy:
-            self.x += 4
+            self.x += self.spd
 
         if self.x > playerx and "left" not in colList:# and dx >= dy:
-            self.x -= 4
+            self.x -= self.spd
 
     def deathCollision(self,bulletList):
         death = False
