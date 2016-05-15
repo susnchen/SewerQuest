@@ -439,10 +439,6 @@ while running:
 
         #display all items
 
-        for i in levelObj.roomList:
-            if i.visited == True:
-                print(i.minimapPos)
-
         # <editor-fold desc="display">
         screen.blit(curRoom.roomImg, (-32, -32))
 

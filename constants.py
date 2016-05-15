@@ -70,12 +70,6 @@ muteButton = [
     pygame.image.load("assets\\images\\gui\\muteButton1.png")
 ]
 
-#minimap gui
-currentRoom = pygame.image.load("assets\\images\\gui\\currentRoom.png")
-visited = pygame.image.load("assets\\images\\gui\\visited.png")
-path = pygame.image.load("assets\\images\\gui\\path.png")
-
-
 #the enemy speed in level 1 and level 2
 enemySpeedSetting = [4,8]
 

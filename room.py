@@ -23,10 +23,6 @@ class Room:
         self.roomNum = roomNum
         self.roomImg = roomImg
 
-        #visited variable will be used to display the minimap
-        self.visited = False
-        self.minimapPos = (0,0)
-
         #checks rbg values of each block (32 by 32 blocks) to see if they are obstacles or water
         #walls have rgb values of (88,84,75) and (74,86,89) and water has values of (97,115,113)
         #since our room image is placed at (-32,-32), we start checking at (-32,-32)

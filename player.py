@@ -25,6 +25,9 @@ class Player:
         self.curSpriteSheet = c.playerSprites["idlel"]
         self.img = self.curSpriteSheet[0]
 
+        #timeBetweenSprite variable will be use to so sprites do not loop too fast
+        self.timeBetweenSprite = 0
+
         self.facing = "down"
 
     def movement(self,curRoom):
@@ -97,8 +100,11 @@ class Player:
             elif self.facing == "left" or self.facing == "down":
                 self.curSpriteSheet = c.playerSprites["idlel"]
 
-        #updates the player sprite
-        self.updateSprite()
+        #updates the player sprite after a certain amount of time has past
+        self.timeBetweenSprite += 1
+        if self.timeBetweenSprite >= 10:
+            self.updateSprite()
+            self.timeBetweenSprite = 0
 
     def updateSprite(self):
         #checks if the sprite counter reaches the end of the sprite sheet

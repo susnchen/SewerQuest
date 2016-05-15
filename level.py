@@ -43,30 +43,3 @@ class Level:
         #creates all the rooms in the level
         for i in range (1,len(c.roomDoorDict[levelNum])-1):
             self.roomList += [room.Room(i,self.fishPlacements[i], self.roomEnemyDict.get(i),c.roomImgs[levelNum][i])]
-    '''
-        self.roomList[0].minimapPos = (2,0)
-        for i in range(0,len(self.roomList)):
-            curMinimapPos = self.roomList[i].minimapPos
-            doorList = c.roomDoorDict[levelNum][i]
-
-            for doorNum in range(0,len(doorList)):
-                adjRoomNum = doorList[doorNum]
-
-                if adjRoomNum != -1:
-                    if doorNum == 0:
-                        self.roomList[adjRoomNum].minimapPos = (curMinimapPos[0],curMinimapPos[1] - 1)
-                    elif doorNum == 1:
-                        self.roomList[adjRoomNum].minimapPos = (curMinimapPos[0] + 1,curMinimapPos[1])
-                    elif doorNum == 2:
-                        self.roomList[adjRoomNum].minimapPos = (curMinimapPos[0],curMinimapPos[1] + 1)
-                    elif doorNum == 3:
-                        self.roomList[adjRoomNum].minimapPos = (curMinimapPos[0] - 1,curMinimapPos[1])
-
-                print((curMinimapPos[0] - 1,curMinimapPos[1]))
-                print(doorList[doorNum])
-    '''
-
-
-
-        #for i in range(1,len(self.roomList)):
-        #   self.roomList[i].minimapPos = (0,0)
