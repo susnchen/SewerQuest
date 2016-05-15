@@ -5,74 +5,43 @@ pygame.font.init()
 gamew = 640
 gameh = 512
 
-#Loading Screen
+#change the game title and icon
+pygame.display.set_caption("Sewer Quest")
+pygame.display.set_icon(pygame.image.load("assets\\images\\gui\\cat.png"))
+
+#Loading Screen because audio takes a while to load
 screen = pygame.display.set_mode((gamew, gameh))
 background = pygame.Surface(screen.get_size())
-background = background.convert()
-background.fill((250, 250, 250))
 font = pygame.font.Font(None, 36)
-text = font.render("Loading...", 1, (10, 10, 10))
-textpos = text.get_rect()
-textpos.centerx = background.get_rect().centerx
-background.blit(text, textpos)
-screen.blit(background, (0, 0))
-pygame.display.set_caption("Sewer Quest")
+text = font.render("Loading...", 1, (255, 255, 255))
+background.blit(text, (0,0))
 
 pygame.display.flip()
 
-clock = pygame.time.Clock()
-clock.tick(60)
+#the bullet image
+bullet = pygame.image.load("assets\\images\\bullet.png")
 
-u = 32 #one unit in the game is 32 pixels
-
-bulletl = pygame.image.load("assets\\images\\bullet.png")
-bulletd = pygame.transform.rotate(bulletl,90)
-bulletr = pygame.transform.rotate(bulletd,90)
-bulletu = pygame.transform.rotate(bulletr,90)
-
+#the enemy sprites
 enemyimg = pygame.image.load("assets\\images\\enemy.png")
 
+#the player sprites, which keys corresponding to each state and values corresponding to the pygame surfaces the game will loop through
 playerSprites = {
-    "down":[
-        pygame.image.load("assets\\images\\playersprites\\left0.png"),
-        pygame.image.load("assets\\images\\playersprites\\left1.png"),
-        pygame.image.load("assets\\images\\playersprites\\left2.png"),
-        pygame.image.load("assets\\images\\playersprites\\left3.png")
-    ],
-    "up":[
-        pygame.image.load("assets\\images\\playersprites\\right0.png"),
-        pygame.image.load("assets\\images\\playersprites\\right1.png"),
-        pygame.image.load("assets\\images\\playersprites\\right2.png"),
-        pygame.image.load("assets\\images\\playersprites\\right3.png")
-    ],
-    "left": [
-        pygame.image.load("assets\\images\\playersprites\\left0.png"),
-        pygame.image.load("assets\\images\\playersprites\\left1.png"),
-        pygame.image.load("assets\\images\\playersprites\\left2.png"),
-        pygame.image.load("assets\\images\\playersprites\\left3.png")
-    ],
-    "right": [
-        pygame.image.load("assets\\images\\playersprites\\right0.png"),
-        pygame.image.load("assets\\images\\playersprites\\right1.png"),
-        pygame.image.load("assets\\images\\playersprites\\right2.png"),
-        pygame.image.load("assets\\images\\playersprites\\right3.png")
-    ],
-    "idlel": [
-        pygame.image.load("assets\\images\\playersprites\\idlel0.png"),
-        pygame.image.load("assets\\images\\playersprites\\idlel1.png"),
-        pygame.image.load("assets\\images\\playersprites\\idlel0.png"),
-        pygame.image.load("assets\\images\\playersprites\\idlel1.png")
-    ],
-    "idler": [
-        pygame.image.load("assets\\images\\playersprites\\idler0.png"),
-        pygame.image.load("assets\\images\\playersprites\\idler1.png"),
-        pygame.image.load("assets\\images\\playersprites\\idler0.png"),
-        pygame.image.load("assets\\images\\playersprites\\idler1.png")
-    ]
+    "left": [None]*4,
+    "right": [None]*4,
+    "idlel": [None]*4,
+    "idler": [None]*4
 }
 
+#adds all sprite according to their sprite
+for state in playerSprites:
+    #all sprites have 4 images
+    for i in range(0,4):
+        playerSprites[state][i] = pygame.image.load("assets\\images\\playersprites\\" + state + str(i) + ".png")
+
+#a list of all the door positions, each door has 2 positions
 doorPos = [(288,0),(320,0),(639,224),(639,256),(320,480),(288,480),(0,224),(0,256)]
 
+#all gui images such as buttons, screens, and icons
 startScreenImg = pygame.image.load("assets\\images\\gui\\startScreen.png")
 transistionImg = pygame.image.load("assets\\images\\gui\\blackScreen.png")
 
@@ -84,65 +53,69 @@ menuButton = pygame.image.load("assets\\images\\gui\\menuButton.png")
 menuBackground = pygame.image.load("assets\\images\\gui\\bg.png")
 cat = pygame.image.load("assets\\images\\gui\\cat.png")
 sadCat = pygame.image.load("assets\\images\\gui\\sadCat.png")
+level1Button = pygame.image.load("assets\\images\\gui\\level1Button.png")
+level2Button = pygame.image.load("assets\\images\\gui\\level2Button.png")
 
-
+#heart and fish images
 heartImg = pygame.image.load("assets\\images\\gui\\heart.png")
+
 fishImg = [
     pygame.image.load("assets\\images\\gui\\fish0.png"),
     pygame.image.load("assets\\images\\gui\\fish1.png")
 ]
 
+#mute button icons
 muteButton = [
     pygame.image.load("assets\\images\\gui\\muteButton0.png"),
     pygame.image.load("assets\\images\\gui\\muteButton1.png")
 ]
 
-muteButton[0].set_alpha(175)
-muteButton[1].set_alpha(175)
+#minimap gui
+currentRoom = pygame.image.load("assets\\images\\gui\\currentRoom.png")
+visited = pygame.image.load("assets\\images\\gui\\visited.png")
+path = pygame.image.load("assets\\images\\gui\\path.png")
 
-enemySpeedSetting = [2,4]
 
-#level setting is the speed of the mouse
+#the enemy speed in level 1 and level 2
+enemySpeedSetting = [4,8]
+
+#fish placements for each level
 fishPlacements = {
     0:[(240,320), False, False,(96,280),(240,320), False, (500,96),False,False,(500,96)],
     1:[(240,320), False, False,(96,280),(32,32),False,False,(500,96),False,False,(32,32),False,(32,32),(96,280),False,False],
 }
 
+#the image for each room
 roomImgs = {
-            0 : [
-        pygame.image.load("assets\\images\\rooms\\room000.png"),
-        pygame.image.load("assets\\images\\rooms\\room001.png"),
-        pygame.image.load("assets\\images\\rooms\\room002.png"),
-        pygame.image.load("assets\\images\\rooms\\room003.png"),
-        pygame.image.load("assets\\images\\rooms\\room004.png"),
-        pygame.image.load("assets\\images\\rooms\\room005.png"),
-        pygame.image.load("assets\\images\\rooms\\room006.png"),
-        pygame.image.load("assets\\images\\rooms\\room007.png"),
-        pygame.image.load("assets\\images\\rooms\\room008.png"),
-        pygame.image.load("assets\\images\\rooms\\room009.png"),
-        pygame.image.load("assets\\images\\rooms\\room010.png"),
-    ],
-            1 : [
-        pygame.image.load("assets\\images\\rooms\\room100.png"),
-        pygame.image.load("assets\\images\\rooms\\room101.png"),
-        pygame.image.load("assets\\images\\rooms\\room102.png"),
-        pygame.image.load("assets\\images\\rooms\\room103.png"),
-        pygame.image.load("assets\\images\\rooms\\room104.png"),
-        pygame.image.load("assets\\images\\rooms\\room105.png"),
-        pygame.image.load("assets\\images\\rooms\\room106.png"),
-        pygame.image.load("assets\\images\\rooms\\room107.png"),
-        pygame.image.load("assets\\images\\rooms\\room108.png"),
-        pygame.image.load("assets\\images\\rooms\\room109.png"),
-        pygame.image.load("assets\\images\\rooms\\room110.png"),
-        pygame.image.load("assets\\images\\rooms\\room111.png"),
-        pygame.image.load("assets\\images\\rooms\\room112.png"),
-        pygame.image.load("assets\\images\\rooms\\room113.png"),
-        pygame.image.load("assets\\images\\rooms\\room114.png"),
-        pygame.image.load("assets\\images\\rooms\\room115.png")
-    ]
+    #level 1
+    0 : [None]*10,
+    #level 2
+    1 : [None]*15
 }
 
-roomDoorDict ={
+#use loops to put each image for each room on each level into the roomImgs dictionary for level 1
+for i in range(0,10):
+    doorNum = str(i)
+
+    #make all numbers 2 characters long, so "0" turns into "00" and "1" turns into "01"
+    if i < 10:
+        doorNum = "0" + str(i)
+
+    #set the room i of level 1 in the roomImg dictionary according to their room number
+    roomImgs[0][i] = pygame.image.load("assets\\images\\rooms\\room0" + doorNum + ".png")
+
+#same with level 2
+for i in range(0,15):
+    doorNum = str(i)
+
+    if i < 10:
+        doorNum = "0" + str(i)
+
+    roomImgs[1][i] = pygame.image.load("assets\\images\\rooms\\room1" + doorNum + ".png")
+
+#a dictionary containing which each door of each room leads to
+roomDoorDict = {
+    #level 1
     0: [
             # index of this list is the room number
             # where the 0th index of each item correspond to door 0 (top door)
@@ -164,6 +137,7 @@ roomDoorDict ={
             (10,8,-1,-1),
             (-1,-1,9,-1)
     ],
+    #level 2
     1: [
             (1,-1,-1,-1),
             (-1,2,0,3),
@@ -184,11 +158,9 @@ roomDoorDict ={
     ]
 }
 
+#loads each audio file, and set their volume to be close to each other
 mainAudio = pygame.mixer.Sound("assets\\audio\\camel.wav")
 mainAudio.set_volume(0.1)
 onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
 shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
 shoot.set_volume(0.1)
-
-
-roomList = []

@@ -11,14 +11,12 @@ class Enemy:
         self.timeBetweenEnemy = 0
 
     def movement(self,playerpos,curRoom):
-        #pathfinder.pathfind(curRoom,(self.x,self.y),playerpos)
 
         playerx = playerpos[0]
         playery = playerpos[1]
 
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
         #rats aren't scared of water, therefore they can walk over water
-        #colList += collision.checkCollision((self.x,self.y),curRoom.waterList)
 
         if self.y > playery and "up" not in colList:# and dy >= dx:
             if "upleft" in colList:
@@ -49,11 +47,11 @@ class Enemy:
         deathBullet = None
 
         for i in bulletList:
-            death = collision.objectCollider((self.x,self.y),(i.x,i.y),5,5)
+            death = collision.spritesCollision((self.x,self.y),(i.x,i.y),5,5)
             deathBullet = i
 
         return death,deathBullet
 
     def playerCollision(self,playerpos):
-        return collision.objectCollider((self.x,self.y),(playerpos))
+        return collision.spritesCollision((self.x,self.y),(playerpos))
 

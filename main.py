@@ -1,3 +1,13 @@
+# by Susan Chen and Samantha Lam
+# May 20, 2016
+# Submitted to ICS3U1, Mr. Cope
+
+# main.py
+# using classes and functions from other files, a game consisting of 2 levels are created
+
+# input: key press and mouse press by the user
+# output: displays the game on the screen and player score in the highscore.txt file
+
 import pygame, pygame.mixer
 import player
 import bullet
@@ -232,17 +242,14 @@ while running:
     gameScreen = True
     gameoverScreen = True
     highscoreScreen = True
-    levelNum = 1
-    levelObj = level.Level(levelNum)
-    curRoomNum = 0
-    curRoom = levelObj.roomList[curRoomNum]
+    levelSelect = False
+    levelNum = 0
     time = 180
     timecount = 0
     timeBetweenBullet = 0
     timeBetweenDamage = 0
     nextRoom = 0
     bulletlist = []
-    background = curRoom.roomImg
     score = time
     name = ""
     # </editor-fold>
@@ -280,7 +287,10 @@ while running:
 
         screen.blit(c.menuBackground,(0,0))
         screen.blit(c.cat,(244, 157))
-        screen.blit(c.startButton,(264,296))
+        if levelSelect:
+            screen.blit(c.level1Button,(182,296))
+            screen.blit(c.level2Button,(330,296))
+        else:screen.blit(c.startButton,(264,296))
         screen.blit(c.highscoresButton,(221,357))
         if button((5,5),32,32): screen.blit(c.muteButton[int(not(bool(mainAudio.muteState)))], (5,5))
         else: screen.blit(c.muteButton[mainAudio.muteState], (5,5))
@@ -299,10 +309,21 @@ while running:
                 #mute button
                 if button((5,5),32,32): mainAudio.mute()
 
-                #start button
-                if button((264,296),111,45):
-                    transistionIn(c.transistionImg)
-                    startMenu = False
+                #level1 and level2 buttons for level select
+                if levelSelect:
+                    if button((182,296),128,45):
+                        startMenu = False
+                        transistionIn(c.transistionImg)
+                        levelNum = 0
+
+                    if button((330,296),128,45):
+                        startMenu = False
+                        transistionIn(c.transistionImg)
+                        levelNum = 1
+
+                #start button, if pressed, will show level select buttons
+                if button((264,296),111,45) and levelSelect == False:
+                    levelSelect = True
 
                 #highscores button
                 if button((221,357),198,45):
@@ -322,6 +343,12 @@ while running:
 
         pygame.display.update()
 
+    levelObj = level.Level(levelNum)
+    curRoomNum = 0
+    curRoom = levelObj.roomList[curRoomNum]
+    curRoom.visited = True
+    background = curRoom.roomImg
+
     # </editor-fold>
 
     playerObj = player.Player()
@@ -334,7 +361,7 @@ while running:
 
         #timer counting down each second
         timecount += 1
-        if timecount == 60:
+        if timecount == 25:
             timecount = 0
             score -= 1
             time -= 1
@@ -349,29 +376,35 @@ while running:
 
         #update current room and player position
         playerpos = (playerObj.x, playerObj.y)
-        curRoom = levelObj.roomList[curRoomNum]
 
         #check if player is collided with the portal to other rooms
-        if collision.checkTransition(playerpos) != 4:
+        door = collision.checkTransition(playerpos)
+        if door != -1:
             bulletlist = []
-            nextRoom = room.transition(collision.checkTransition(playerpos), curRoomNum, levelNum)
+            nextRoom = room.transition(door, curRoomNum, levelNum)
 
             curRoomNum = nextRoom[0]
+            curRoom = levelObj.roomList[curRoomNum]
+            curRoom.visited = True
 
             if nextRoom[1] == 0:
-                playerObj.move((320, 40))
+                playerObj.x = 320
+                playerObj.y = 40
 
             elif nextRoom[1] == 1:
-                playerObj.move((600, 224))
+                playerObj.x = 600
+                playerObj.y = 224
 
             elif nextRoom[1] == 2:
-                playerObj.move((288, 440))
+                playerObj.x = 288
+                playerObj.y = 440
 
             elif nextRoom[1] == 3:
-                playerObj.move((8, 224))
+                playerObj.x = 8
+                playerObj.y = 224
 
         #check if player is collided with a fish
-        if curRoom.fishPlacement != False and collision.objectCollider(playerpos, curRoom.fishPlacement):
+        if curRoom.fishPlacement != False and collision.spritesCollision(playerpos, curRoom.fishPlacement):
             levelObj.fishLeft -= 1
             score += 5
             curRoom.fishPlacement = False
@@ -405,6 +438,11 @@ while running:
                 c.onHit.play()
 
         #display all items
+
+        for i in levelObj.roomList:
+            if i.visited == True:
+                print(i.minimapPos)
+
         # <editor-fold desc="display">
         screen.blit(curRoom.roomImg, (-32, -32))
 
@@ -448,7 +486,7 @@ while running:
                     pause(score)
 
                 # if you shoot
-                elif timeBetweenBullet > 5:
+                elif timeBetweenBullet > 12:
                     timeBetweenBullet = 0
                     bulletlist += [bullet.Bullet(playerpos, pygame.mouse.get_pos())]
                     c.shoot.play()
