@@ -14,7 +14,7 @@ import constants as c
 
 class Player:
     def __init__(self):
-        #intial variables such as position health and sprite of the player
+        #intial variables such as position, health and sprite of the player
         self.y = 64
         self.x = 32
 
@@ -46,7 +46,7 @@ class Player:
             idle = False
 
             #update the state of the sprite sheet
-            self.curSpriteSheet = c.playerSprites["right"]
+            self.curSpriteSheet = c.playerSprites["up"]
             self.facing = "up"
 
             #checks if there is something above the player and if not, move the player
@@ -63,7 +63,7 @@ class Player:
         #repeat this with all other keys
         if keys[pygame.K_s]:
             idle = False
-            self.curSpriteSheet = c.playerSprites["left"]
+            self.curSpriteSheet = c.playerSprites["down"]
             self.facing = "down"
 
             if "down" not in colList:
@@ -94,15 +94,11 @@ class Player:
         #if no keys were pressed
         elif idle:
             #switch the sprite sheet to idle according to the facing of the player
-            if self.facing == "right" or self.facing == "up":
-                self.curSpriteSheet = c.playerSprites["idler"]
-
-            elif self.facing == "left" or self.facing == "down":
-                self.curSpriteSheet = c.playerSprites["idlel"]
+            self.curSpriteSheet = c.playerSprites["idle"+self.facing[0]]
 
         #updates the player sprite after a certain amount of time has past
         self.timeBetweenSprite += 1
-        if self.timeBetweenSprite >= 10:
+        if self.timeBetweenSprite >= 2:
             self.updateSprite()
             self.timeBetweenSprite = 0
 
@@ -114,4 +110,5 @@ class Player:
 
         #update the image
         self.img = self.curSpriteSheet[self.spriteCount]
+
         self.spriteCount += 1

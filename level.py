@@ -30,16 +30,16 @@ class Level:
             0: []
         }
 
-        #creates all the enemies in each room
-        for i in range(1, len(c.roomDoorDict[levelNum])-1):
+        #spawns all the enemies in each room
+        for i in range(1, len(c.roomDoorDict[levelNum])):
             enemyList = []
-            for j in range(0, random.randint(1, 3)):
-                randx = random.randint(1, 18)
-                randy = random.randint(1, 14)
+            for j in range(0, random.randint(3, 7)):
+                randx = random.randint(3, 16)
+                randy = random.randint(3, 11)
                 enemyList += [enemy.Enemy(1, c.enemySpeedSetting[levelNum], 32 * randx, 32 * randy)]
 
             self.roomEnemyDict[i] = enemyList
 
         #creates all the rooms in the level
-        for i in range (1,len(c.roomDoorDict[levelNum])-1):
+        for i in range (1,len(c.roomDoorDict[levelNum])):
             self.roomList += [room.Room(i,self.fishPlacements[i], self.roomEnemyDict.get(i),c.roomImgs[levelNum][i])]

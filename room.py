@@ -23,6 +23,10 @@ class Room:
         self.roomNum = roomNum
         self.roomImg = roomImg
 
+        #visited variable will be used to display the minimap
+        self.visited = False
+        self.minimapPos = (0,0)
+
         #checks rbg values of each block (32 by 32 blocks) to see if they are obstacles or water
         #walls have rgb values of (88,84,75) and (74,86,89) and water has values of (97,115,113)
         #since our room image is placed at (-32,-32), we start checking at (-32,-32)
@@ -44,9 +48,14 @@ class Room:
 
 #checks which room to go out
 def transition(inCDoorNum,inCRoomNum,levelNum):
-    #the next room will be what the door of the current room leads to
-    #this is stored inside the roomDoorDict variable
-    nextRoomNum = c.roomDoorDict[levelNum][inCRoomNum][inCDoorNum]
+    #if the player reaches the final door, we will return "win" string to show that it's been reached
+    if inCRoomNum == "win":
+        nextRoomNum = "win"
+
+    else:
+        #the next room will be what the door of the current room leads to
+        #this is stored inside the roomDoorDict variable
+        nextRoomNum = c.roomDoorDict[levelNum][inCRoomNum][inCDoorNum]
 
     #the top door is door 0, right door is door 1, bottom door is door 2, left door is door 3
     #top doors would lead to bottom doors and vice versa
@@ -57,5 +66,5 @@ def transition(inCDoorNum,inCRoomNum,levelNum):
     else:
         outGDoorNum = inCDoorNum + 2
 
-    #returns the door that the player will be coming out from and to which room
+        #returns the door that the player will be coming out from and to which room
     return nextRoomNum, outGDoorNum

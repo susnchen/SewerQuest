@@ -11,10 +11,14 @@ pygame.display.set_icon(pygame.image.load("assets\\images\\gui\\cat.png"))
 
 #Loading Screen because audio takes a while to load
 screen = pygame.display.set_mode((gamew, gameh))
-background = pygame.Surface(screen.get_size())
+background = pygame.Surface(screen.get_size()).convert()
+background.fill((0,0,0))
+
 font = pygame.font.Font(None, 36)
 text = font.render("Loading...", 1, (255, 255, 255))
-background.blit(text, (0,0))
+
+background.blit(text,(0,0))
+screen.blit(background, (0,0))
 
 pygame.display.flip()
 
@@ -26,17 +30,35 @@ enemyimg = pygame.image.load("assets\\images\\enemy.png")
 
 #the player sprites, which keys corresponding to each state and values corresponding to the pygame surfaces the game will loop through
 playerSprites = {
-    "left": [None]*4,
-    "right": [None]*4,
-    "idlel": [None]*4,
-    "idler": [None]*4
+    "left": [None]*3,
+    "right": [None]*3,
+    "up": [None]*3,
+    "down":[None]*3,
+    "idlel": [None]*3,
+    "idled": [None]*3,
+    "idleu": [None]*3,
+    "idler": [None]*3
 }
 
 #adds all sprite according to their sprite
 for state in playerSprites:
-    #all sprites have 4 images
-    for i in range(0,4):
+    #all sprites have 3 images
+    for i in range(0,3):
         playerSprites[state][i] = pygame.image.load("assets\\images\\playersprites\\" + state + str(i) + ".png")
+
+#same with the enemySprites
+enemySprites = {
+    "left": [None]*2,
+    "right": [None]*2,
+    "up": [None]*2,
+    "down":[None]*2
+}
+
+for state in enemySprites:
+    #all sprites have 2 images
+    for i in range(0,2):
+        enemySprites[state][i] = pygame.image.load("assets\\images\\enemysprites\\" + state + str(i) + ".png")
+
 
 #a list of all the door positions, each door has 2 positions
 doorPos = [(288,0),(320,0),(639,224),(639,256),(320,480),(288,480),(0,224),(0,256)]
@@ -75,20 +97,20 @@ enemySpeedSetting = [4,8]
 
 #fish placements for each level
 fishPlacements = {
-    0:[(240,320), False, False,(96,280),(240,320), False, (500,96),False,False,(500,96)],
+    0:[(240,320), False, False,(96,280),(240,320), False, (500,96),False,False,(500,96),(500,96)],
     1:[(240,320), False, False,(96,280),(32,32),False,False,(500,96),False,False,(32,32),False,(32,32),(96,280),False,False],
 }
 
 #the image for each room
 roomImgs = {
     #level 1
-    0 : [None]*10,
+    0 : [None]*11,
     #level 2
-    1 : [None]*15
+    1 : [None]*16
 }
 
 #use loops to put each image for each room on each level into the roomImgs dictionary for level 1
-for i in range(0,10):
+for i in range(0,11):
     doorNum = str(i)
 
     #make all numbers 2 characters long, so "0" turns into "00" and "1" turns into "01"
@@ -99,7 +121,7 @@ for i in range(0,10):
     roomImgs[0][i] = pygame.image.load("assets\\images\\rooms\\room0" + doorNum + ".png")
 
 #same with level 2
-for i in range(0,15):
+for i in range(0,16):
     doorNum = str(i)
 
     if i < 10:
@@ -129,7 +151,7 @@ roomDoorDict = {
             (8,-1,-1,6),
             (-1,-1,7,9),
             (10,8,-1,-1),
-            (-1,-1,9,-1)
+            ("win",-1,9,-1)
     ],
     #level 2
     1: [
@@ -148,7 +170,7 @@ roomDoorDict = {
             (-1,13,-1,11),
             (14,-1,-1,12),
             (-1,15,13,-1),
-            (14,-1,-1,-1)
+            (14,-1,"win",-1)
     ]
 }
 

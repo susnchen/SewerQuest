@@ -21,6 +21,7 @@ import audio
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
+pygame.display.set_caption("Sewer Quest")
 # </editor-fold>
 
 # <editor-fold desc="start game variables">
@@ -204,7 +205,7 @@ def gameOver(state,score):
                     transistionIn(c.transistionImg)
                     gameoverScreen = False
 
-            if ev.type == pygame.KEYDOWN:
+            if ev.type == pygame.KEYDOWN and len(name) < 8:
                 #if an alphabet is pressed
                 if ev.unicode.isalpha():
                     #adds the capitalized version of it (for consistency) to the name
@@ -252,6 +253,7 @@ while running:
     bulletlist = []
     score = time
     name = ""
+    victory = False
     # </editor-fold>
 
     # <editor-fold desc="start screen">
@@ -344,7 +346,7 @@ while running:
         pygame.display.update()
 
     levelObj = level.Level(levelNum)
-    curRoomNum = 0
+    curRoomNum = 8
     curRoom = levelObj.roomList[curRoomNum]
     curRoom.visited = True
     background = curRoom.roomImg
@@ -379,29 +381,35 @@ while running:
 
         #check if player is collided with the portal to other rooms
         door = collision.checkTransition(playerpos)
+
         if door != -1:
-            bulletlist = []
             nextRoom = room.transition(door, curRoomNum, levelNum)
-
             curRoomNum = nextRoom[0]
-            curRoom = levelObj.roomList[curRoomNum]
-            curRoom.visited = True
+            print(curRoomNum)
+            if curRoomNum == "win":
+                victory = True
 
-            if nextRoom[1] == 0:
-                playerObj.x = 320
-                playerObj.y = 40
+            else:
+                bulletlist = []
 
-            elif nextRoom[1] == 1:
-                playerObj.x = 600
-                playerObj.y = 224
+                curRoom = levelObj.roomList[curRoomNum]
+                curRoom.visited = True
 
-            elif nextRoom[1] == 2:
-                playerObj.x = 288
-                playerObj.y = 440
+                if nextRoom[1] == 0:
+                    playerObj.x = 320
+                    playerObj.y = 40
 
-            elif nextRoom[1] == 3:
-                playerObj.x = 8
-                playerObj.y = 224
+                elif nextRoom[1] == 1:
+                    playerObj.x = 600
+                    playerObj.y = 224
+
+                elif nextRoom[1] == 2:
+                    playerObj.x = 288
+                    playerObj.y = 440
+
+                elif nextRoom[1] == 3:
+                    playerObj.x = 8
+                    playerObj.y = 224
 
         #check if player is collided with a fish
         if curRoom.fishPlacement != False and collision.spritesCollision(playerpos, curRoom.fishPlacement):
@@ -422,9 +430,10 @@ while running:
         #move all enemy
         for i in curRoom.enemyList:
             i.timeBetweenEnemy += 1
-            if i.playerCollision(playerpos) and timeBetweenDamage >= 60:
+            if i.playerCollision(playerpos) and timeBetweenDamage >= 25:
                 timeBetweenDamage = 0
                 playerObj.health -= 1
+                playerObj.damaged = True
 
             if i.timeBetweenEnemy >= 2:
                 i.timeBetweenEnemy = 0
@@ -491,12 +500,12 @@ while running:
                 if ev.key == pygame.K_ESCAPE:
                     pause(score)
 
-        if playerObj.health == 0 or levelObj.fishLeft == 0 or time <= 0:
+        if playerObj.health == 0 or levelObj.fishLeft == 0 or time <= 0 or victory:
             gameScreen = False
 
     # </editor-fold>
 
-    if playerObj.health > 0 and time > 0 and gameoverScreen:
+    if (playerObj.health > 0 and time > 0 and gameoverScreen):
         name = gameOver("VICTORY", score)
 
     elif gameoverScreen:
