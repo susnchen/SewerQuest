@@ -5,6 +5,10 @@ pygame.font.init()
 gamew = 640
 gameh = 512
 
+#establish the 2 fonts that will be used in this program
+font = pygame.font.Font("assets\\font.ttf",12)
+menuFont = pygame.font.Font("assets\\font.ttf",32)
+
 #change the game title and icon
 pygame.display.set_caption("Sewer Quest")
 pygame.display.set_icon(pygame.image.load("assets\\images\\gui\\cat.png"))
@@ -14,7 +18,6 @@ screen = pygame.display.set_mode((gamew, gameh))
 background = pygame.Surface(screen.get_size()).convert()
 background.fill((0,0,0))
 
-font = pygame.font.Font(None, 36)
 text = font.render("Loading...", 1, (255, 255, 255))
 
 background.blit(text,(0,0))
@@ -65,7 +68,7 @@ doorPos = [(288,0),(320,0),(639,224),(639,256),(320,480),(288,480),(0,224),(0,25
 
 #all gui images such as buttons, screens, and icons
 startScreenImg = pygame.image.load("assets\\images\\gui\\startScreen.png")
-transistionImg = pygame.image.load("assets\\images\\gui\\blackScreen.png")
+transitionImg = pygame.image.load("assets\\images\\gui\\blackScreen.png")
 
 startButton = pygame.image.load("assets\\images\\gui\\startButton.png")
 highscoresButton = pygame.image.load("assets\\images\\gui\\highscoresButton.png")
@@ -180,3 +183,18 @@ mainAudio.set_volume(0.1)
 onHit = pygame.mixer.Sound("assets\\audio\\onHit.wav")
 shoot = pygame.mixer.Sound("assets\\audio\\shoot.wav")
 shoot.set_volume(0.1)
+
+#text that will display during certain parts of the game such as outro and intro
+introtxt = ["OH NO I GOTTA GET ALL MY FISHES.", "IM HUNGRY. BUT WOW THOSE DARN RATS!", "I\'M SO HUNGRY I BETTER GET GOING!"]
+for i in range (0,len(introtxt)):
+    introtxt[i] = font.render(introtxt[i],1, (255, 255, 255))
+outrotxt = ["YES!!! I GOT ALL MY FISHES!", "THAT WAS GREAT. I LOVE MY fISH.", "AHAH SCREW THOSE RATS!!11!!!!"]
+for i in range (0,len(outrotxt)):
+    outrotxt[i] = font.render(outrotxt[i],1, (255, 255, 255))
+
+pausetxt = menuFont.render("PAUSED",1, (255, 255, 255))
+bonustxt = font.render(" + BONUS!", 1,(255,255,255))
+titletxt = menuFont.render("SEWER QUEST",1, (255, 255, 255))
+highscoretxt = menuFont.render("HIGH SCORE", 1, (255, 255, 255))
+continuetxt = font.render("PRESS ANYTHING TO CONTINUE", 1,(255,255,255))
+pauseButton = font.render("PAUSE", 1,(255,255,255))
