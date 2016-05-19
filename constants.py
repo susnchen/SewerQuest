@@ -28,9 +28,6 @@ pygame.display.flip()
 #the bullet image
 bullet = pygame.image.load("assets\\images\\bullet.png")
 
-#the enemy sprites
-enemyimg = pygame.image.load("assets\\images\\enemy.png")
-
 #the player sprites, which keys corresponding to each state and values corresponding to the pygame surfaces the game will loop through
 playerSprites = {
     "left": [None]*3,
@@ -51,15 +48,15 @@ for state in playerSprites:
 
 #same with the enemySprites
 enemySprites = {
-    "left": [None]*2,
-    "right": [None]*2,
-    "up": [None]*2,
-    "down":[None]*2
+    "left": [None]*3,
+    "right": [None]*3,
+    "up": [None]*3,
+    "down":[None]*3
 }
 
 for state in enemySprites:
-    #all sprites have 2 images
-    for i in range(0,2):
+    #all sprites have 3 images
+    for i in range(0,3):
         enemySprites[state][i] = pygame.image.load("assets\\images\\enemysprites\\" + state + str(i) + ".png")
 
 
@@ -188,9 +185,14 @@ shoot.set_volume(0.1)
 introtxt = ["OH NO I GOTTA GET ALL MY FISHES.", "IM HUNGRY. BUT WOW THOSE DARN RATS!", "I\'M SO HUNGRY I BETTER GET GOING!"]
 for i in range (0,len(introtxt)):
     introtxt[i] = font.render(introtxt[i],1, (255, 255, 255))
-outrotxt = ["YES!!! I GOT ALL MY FISHES!", "THAT WAS GREAT. I LOVE MY fISH.", "AHAH SCREW THOSE RATS!!11!!!!"]
-for i in range (0,len(outrotxt)):
-    outrotxt[i] = font.render(outrotxt[i],1, (255, 255, 255))
+outrotxt = {
+    0:["YES!!! I GOT ALL MY FISHES!", "THAT WAS GREAT. I LOVE MY fISH.", "AHAH SCREW THOSE RATS!!11!!!!"],
+    1:["oh no!"],
+    2:["imbad!","alkjfal;kdjf"]
+}
+for list in range(0,len(outrotxt)):
+    for i in range (0,len(outrotxt[list])):
+        outrotxt[list][i] = font.render(outrotxt[list][i],1, (255, 255, 255))
 
 pausetxt = menuFont.render("PAUSED",1, (255, 255, 255))
 bonustxt = font.render(" + BONUS!", 1,(255,255,255))

@@ -140,13 +140,13 @@ def pause(score):
                     pause = False
 
 #the gameover/victory screen
-def gameOver(state,score):
+def gameOver(state,score,fishesleft):
     global gameoverScreen, running, highscoreScreen,endScreen
     name = ""
     #the bonus text that will display if the player won
 
     #if the player won, a bonus score of 100 points will be rewarded
-    if state == "VICTORY":bonusScore = 100
+    if state == "VICTORY" and fishesleft == 0:bonusScore = 100
     else: bonusScore = 0
 
     quit = False
@@ -509,6 +509,11 @@ while running:
             gameScreen = False
 
     # </editor-fold>
+    outrotxtNum = 0
+    if time <= 0 or playerObj.health <= 0:
+        outrotxtNum = 2
+    elif levelObj.fishLeft > 0:
+        outrotxtNum = 1
 
     while endScreen:
         if not mainAudio.muteState: mainAudio.update(15)
@@ -519,8 +524,8 @@ while running:
         screen.blit(c.titletxt,(135,60))
         screen.blit(c.continuetxt,(150,450))
 
-        for i in range(0, len(c.outrotxt)):
-            screen.blit(c.outrotxt[i], (150, 300 + i * 30))
+        for i in range(0, len(c.outrotxt[outrotxtNum])):
+            screen.blit(c.outrotxt[outrotxtNum][i], (150, 300 + i * 30))
 
         pygame.display.update()
 
@@ -539,10 +544,10 @@ while running:
     # </editor-fold>
 
     if (playerObj.health > 0 and time > 0 and gameoverScreen):
-        name = gameOver("VICTORY", score)
+        name = gameOver("VICTORY", score, levelObj.fishLeft)
 
     elif gameoverScreen:
-        name = gameOver("GAME OVER", score)
+        name = gameOver("GAME OVER", score, levelObj.fishLeft)
 
     # <editor-fold desc="highscore file indexing">
     highscoreFile = open("highscore.txt","r")
