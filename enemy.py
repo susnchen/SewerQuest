@@ -3,6 +3,7 @@ import collision
 
 class Enemy:
     def __init__(self, strength, spd, x, y):
+        #initial variables such as speed, position and strength of the enemy
         self.spd = spd
         self.x = x
         self.y = y
@@ -25,7 +26,7 @@ class Enemy:
         colList = collision.checkCollision((self.x,self.y),curRoom.obstacleList)
         #rats aren't scared of water, therefore they can walk over water
 
-        if self.y > playery and "up" not in colList:# and dy >= dx:
+        if self.y > playery and "up" not in colList:
             if "upleft" in colList:
                 colList += ["left"]
 
@@ -36,7 +37,7 @@ class Enemy:
 
             self.curSpriteSheet = c.enemySprites["up"]
 
-        if self.y < playery and "down" not in colList:# and dy >= dx:
+        if self.y < playery and "down" not in colList:
             if "downleft" in colList:
                 colList += ["left"]
 
@@ -47,11 +48,11 @@ class Enemy:
 
             self.curSpriteSheet = c.enemySprites["down"]
 
-        if self.x < playerx and "right" not in colList:# and dx >= dy:
+        if self.x < playerx and "right" not in colList:#
             self.x += self.spd
             self.curSpriteSheet = c.enemySprites["right"]
 
-        if self.x > playerx and "left" not in colList:# and dx >= dy:
+        if self.x > playerx and "left" not in colList:
             self.x -= self.spd
             self.curSpriteSheet = c.enemySprites["left"]
 
@@ -82,5 +83,6 @@ class Enemy:
         return death,deathBullet
 
     def playerCollision(self,playerpos):
+       #if enemy collides with player the player will lose health
         return collision.spritesCollision((self.x,self.y),(playerpos))
 

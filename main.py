@@ -98,9 +98,13 @@ def pause(score):
 
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
+                gameoverScreen = False
+                gameScreen = False
+                highscoreScreen = False
+                running = False
+                pause = False
+                endScreen = False
                 pygame.quit()
-                quit()
-
 
             #if the player presses the:
             if ev.type == pygame.MOUSEBUTTONDOWN:
@@ -121,6 +125,7 @@ def pause(score):
                     gameScreen = False
                     highscoreScreen = False
                     pause = False
+                    endScreen = False
 
                 #exit button
                 if button((330,422),94,45):
@@ -132,6 +137,7 @@ def pause(score):
                     running = False
                     pause = False
                     endScreen = False
+                    pygame.quit()
 
             if ev.type == pygame.KEYDOWN:
                 #escape button also resumes the game
@@ -143,7 +149,6 @@ def pause(score):
 def gameOver(state,score,fishesleft):
     global gameoverScreen, running, highscoreScreen,endScreen
     name = ""
-    #the bonus text that will display if the player won
 
     #if the player won, a bonus score of 100 points will be rewarded
     if state == "VICTORY" and fishesleft == 0:bonusScore = 100
@@ -190,6 +195,7 @@ def gameOver(state,score,fishesleft):
                 highscoreScreen = False
                 endScreen = False
                 quit = True
+                pygame.quit()
 
             #if the player presses:
             if ev.type == pygame.MOUSEBUTTONDOWN:
@@ -201,14 +207,14 @@ def gameOver(state,score,fishesleft):
                     transitionIn(c.transitionImg)
                     gameoverScreen = False
 
-            if ev.type == pygame.KEYDOWN and len(name) < 8:
+            if ev.type == pygame.KEYDOWN and len(name) < 11:
                 #if an alphabet is pressed
-                if ev.unicode.isalpha():
+                if ev.unicode.isalpha() and len(name) < 10:
                     #adds the capitalized version of it (for consistency) to the name
                     name += ev.unicode.upper()
 
                 #adds space compatibility
-                elif ev.key == pygame.K_SPACE:
+                elif ev.key == pygame.K_SPACE and len(name) < 10:
                     name += " "
 
                 #if the backspace button was pressed
@@ -278,6 +284,7 @@ while running:
                 gameoverScreen = False
                 highscoreScreen = False
                 endScreen = False
+                pygame.quit()
 
             if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
                 transitionIn(c.transitionImg)
@@ -303,6 +310,8 @@ while running:
         screen.blit(c.exitButton,(273, 418))
         screen.blit(c.titletxt,(135,60))
 
+        pygame.display.update()
+
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 startMenu = False
@@ -311,6 +320,7 @@ while running:
                 gameoverScreen = False
                 highscoreScreen = False
                 endScreen = False
+                pygame.quit()
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 #mute button
@@ -338,6 +348,7 @@ while running:
                     startMenu = False
                     gameScreen = False
                     gameoverScreen = False
+                    endScreen = False
 
                 #exit button
                 if button((273,418),94,45):
@@ -348,11 +359,10 @@ while running:
                     running = False
                     endScreen = False
                     highscoreScreen = False
-
-        pygame.display.update()
+                    pygame.quit()
 
     levelObj = level.Level(levelNum)
-    curRoomNum = 8
+    curRoomNum = 0
     curRoom = levelObj.roomList[curRoomNum]
     curRoom.visited = True
     background = curRoom.roomImg
@@ -489,6 +499,7 @@ while running:
                 gameoverScreen = False
                 highscoreScreen = False
                 endScreen = False
+                pygame.quit()
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 #if you pressed the pause button
@@ -536,6 +547,7 @@ while running:
                 gameoverScreen = False
                 highscoreScreen = False
                 endScreen = False
+                pygame.quit()
 
             if ev.type == pygame.KEYDOWN or ev.type == pygame.MOUSEBUTTONDOWN:
                 transitionIn(c.transitionImg)
@@ -584,6 +596,8 @@ while running:
             screen.blit(value,(410, 135 + (lineNum - highscoreRange)*30))
             lineNum += 1
 
+        pygame.display.update()
+
         for ev in pygame.event.get():
             if ev.type == pygame.QUIT:
                 running = False
@@ -591,6 +605,7 @@ while running:
                 gameoverScreen = False
                 highscoreScreen = False
                 endScreen = False
+                pygame.quit()
 
             if ev.type == pygame.MOUSEBUTTONDOWN:
                 #mute button
@@ -600,6 +615,7 @@ while running:
                 if button((215, 422), 94, 45):
                     transitionIn(c.transitionImg)
                     highscoreScreen = False
+                    endScreen = False
 
                 #exit button
                 if button((331, 422), 94, 45):
@@ -608,6 +624,5 @@ while running:
                     endScreen = False
                     gameoverScreen = False
                     highscoreScreen = False
-
-        pygame.display.update()
+                    pygame.quit()
         # </editor-fold>
