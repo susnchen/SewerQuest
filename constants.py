@@ -148,8 +148,8 @@ fishPlacements = {
     #the items of the list in the value corresponds to the position of the fishes in each room
     #the index of that item corresponds to the room number
     #if the value is False, it means there are no fishes
-    0:[(240,320), False, False,(96,280),(240,320), False, (500,96),False,False,(500,96),(500,96)],
-    1:[(240,320), False, False,(96,280),(32,32),False,False,(500,96),False,False,(32,32),False,(32,32),(96,280),False,False],
+    0:[(301,107), False, (155,244),(False),(304,392), (454, 397), False, False,(366,392),(127,125),False],
+    1:[False, (349,243), False,(513,397),(513,397),False,False,(108,315),(494,200),False,(305,237),False,False,False,(88,186),False],
 }
 
 #the image for each room
@@ -233,13 +233,13 @@ shoot = pygame.mixer.Sound(audioDir + "shoot.wav")
 shoot.set_volume(0.1)
 
 #text that will display during certain parts of the game such as outro and intro
-introtxt = ["OH NO I GOTTA GET ALL MY FISHES.", "IM HUNGRY. BUT WOW THOSE DARN RATS!", "I\'M SO HUNGRY I BETTER GET GOING!"]
+introtxt = ["Hungry cat. Find fish!"]
 for i in range (0,len(introtxt)):
     introtxt[i] = font.render(introtxt[i],1, (255, 255, 255))
 outrotxt = {
-    0:["YES!!! I GOT ALL MY FISHES!", "THAT WAS GREAT. I LOVE MY fISH.", "AHAH SCREW THOSE RATS!!11!!!!"],
-    1:["oh no!"],
-    2:["imbad!","alkjfal;kdjf"]
+    0:["I got all my fish!", "I did it!"],
+    1:["Dang it. I didn't get all my fish", "At least I got through those rats!"],
+    2:["Those rats.","I'll get through them next time!"]
 }
 for list in range(0,len(outrotxt)):
     for i in range (0,len(outrotxt[list])):
