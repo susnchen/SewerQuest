@@ -230,6 +230,11 @@ mainAudio = pygame.mixer.Sound(audioDir + "camel.wav")
 mainAudio.set_volume(0.1)
 onHit = pygame.mixer.Sound(audioDir + "onHit.wav")
 shoot = pygame.mixer.Sound(audioDir + "shoot.wav")
+playerHit = pygame.mixer.Sound(audioDir + "playerHit.wav")
+button = pygame.mixer.Sound(audioDir + "button.wav")
+playerDeath = pygame.mixer.Sound(audioDir + "playerDeath.wav")
+getFish = pygame.mixer.Sound(audioDir + "getFish.wav")
+playerWin = pygame.mixer.Sound(audioDir + "playerWin.wav")
 shoot.set_volume(0.1)
 
 #text that will display during certain parts of the game such as outro and intro

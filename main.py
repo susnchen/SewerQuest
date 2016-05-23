@@ -402,6 +402,7 @@ while running:
             print(curRoomNum)
             if curRoomNum == "win":
                 victory = True
+                c.playerWin.play()
 
             else:
                 bulletlist = []
@@ -430,6 +431,7 @@ while running:
             levelObj.fishLeft -= 1
             score += 5
             curRoom.fishPlacement = False
+            c.getFish.play()
 
         #move the player
         playerObj.movement(curRoom)
@@ -448,6 +450,7 @@ while running:
                 timeBetweenDamage = 0
                 playerObj.health -= 1
                 playerObj.damaged = True
+                c.playerHit.play()
 
             if i.timeBetweenEnemy >= 2:
                 i.timeBetweenEnemy = 0
