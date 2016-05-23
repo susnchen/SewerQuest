@@ -15,8 +15,8 @@ import constants as c
 class Player:
     def __init__(self):
         #intial variables such as position, health and sprite of the player
-        self.y = 64
-        self.x = 32
+        self.y = 416
+        self.x = 304
 
         self.health = 3
 

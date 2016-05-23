@@ -1,5 +1,11 @@
 import pygame
+from pygame.locals import *
 import platform
+
+#initializes pygame
+pygame.init()
+pygame.mixer.init(44100, 16, 2, 4096)
+pygame.font.init()
 
 #checks the operating system
 system = platform.system()
@@ -47,9 +53,6 @@ elif system == "Darwin":
 else:
     print("ERROR: invalid operating system")
     quit()
-
-pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=4096)
-pygame.font.init()
 
 gamew = 640
 gameh = 512
@@ -140,7 +143,7 @@ muteButton = [
 ]
 
 #the enemy speed in level 1 and level 2
-enemySpeedSetting = [4,8]
+enemySpeedSetting = [4,6]
 
 #fish placements for each level
 fishPlacements = {
@@ -227,15 +230,21 @@ roomDoorDict = {
 
 #loads each audio file, and set their volume to be close to each other
 mainAudio = pygame.mixer.Sound(audioDir + "camel.wav")
-mainAudio.set_volume(0.1)
+playerWin = pygame.mixer.Sound(audioDir + "playerWin.wav")
 onHit = pygame.mixer.Sound(audioDir + "onHit.wav")
 shoot = pygame.mixer.Sound(audioDir + "shoot.wav")
 playerHit = pygame.mixer.Sound(audioDir + "playerHit.wav")
 button = pygame.mixer.Sound(audioDir + "button.wav")
 playerDeath = pygame.mixer.Sound(audioDir + "playerDeath.wav")
 getFish = pygame.mixer.Sound(audioDir + "getFish.wav")
-playerWin = pygame.mixer.Sound(audioDir + "playerWin.wav")
-shoot.set_volume(0.1)
+click = pygame.mixer.Sound(audioDir + "click.wav")
+playerLose = pygame.mixer.Sound(audioDir + "playerLose.wav")
+
+mainAudio.set_volume(0.3)
+onHit.set_volume(0.3)
+shoot.set_volume(0.5)
+getFish.set_volume(0.5)
+playerLose.set_volume(0.3)
 
 #text that will display during certain parts of the game such as outro and intro
 introtxt = ["Hungry cat. Find fish!"]
