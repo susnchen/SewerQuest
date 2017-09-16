@@ -1,3 +1,4 @@
+
 # by Susan Chen and Samantha Lam
 # May 20, 2016
 # Submitted to ICS3U1, Mr. Cope
@@ -30,7 +31,7 @@ class Audio:
             self.sound.play()
             self.replayCounter = 0
 
-    #function that will mute or unmute the sound
+    #function that will mute or unmute the sound 
     def mute(self):
         #if the sound is muted, play the sound
         if self.muteState == 1:

@@ -1,3 +1,4 @@
+
 # by Susan Chen and Samantha Lam
 # May 20, 2016
 # Submitted to ICS3U1, Mr. Cope
@@ -6,7 +7,7 @@
 # contains a class that will control a bullet's motion and collision
 
 # input: player position and mouse position as tuples
-# output: position and direction of bullet
+# output: position and direction of bullet 
 
 import collision, constants as c
 from math import atan2, degrees
