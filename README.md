@@ -1,4 +1,4 @@
-ICS3U1---Summative is made by: Susan Chen for Earl Haig's grade 11 Computer Science summative.
+ICS3U1---Summative is made by: Susan Chen and Samantha Lam for Earl Haig's grade 11 Computer Science summative.
 This program is a game called Sewer Quest. 
 
 Instruction:
